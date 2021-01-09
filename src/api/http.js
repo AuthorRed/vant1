@@ -30,6 +30,25 @@ function IEVersion() {
     }
 }
 
+export function getRequest(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        if (IEVersion() != -1) {
+            data.time = new Date().getTime()
+        }
+
+        http
+            .get(url, {
+                params: data
+            })
+            .then(response => {
+                resolve(response);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
+}
+
 export function fetch(url, params = {}) {
 
     return new Promise((resolve, reject) => {
@@ -68,16 +87,11 @@ export function postRequest(url, data = {}) {
     });
 
 }
-export function getRequest(url, data = {}) {
+//封装post请求
+export function postFile(url, data = {}) {
     return new Promise((resolve, reject) => {
-        if (IEVersion() != -1) {
-            data.time = new Date().getTime()
-        }
-
         http
-            .get(url, {
-                params: data
-            })
+            .post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(response => {
                 resolve(response);
             })
@@ -85,7 +99,10 @@ export function getRequest(url, data = {}) {
                 reject(err);
             });
     });
+
 }
+
+
 
 export function exportExcel(url, data = {}) {
 
