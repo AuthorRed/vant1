@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 8000",
     "build": "vue-cli-service build"
   },
   "dependencies": {
     "@kevinfaguiar/vue-twemoji-picker": "^5.7.4",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "qs": "^6.9.4",
     "vant": "^2.0.5",

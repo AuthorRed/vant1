@@ -7,10 +7,12 @@
 <script>
 //import EmojiPicker from '@/components/EmojiPicker.vue'
 export default {
-   name: 'About'
-  //,
+   name: 'About',
   // components: {
   //   EmojiPicker
   // }
+  mounted : function (){
+    console.log('mounted-about');
+  }
 }
 </script>
