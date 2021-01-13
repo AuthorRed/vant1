@@ -1,9 +1,15 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <router-link to="/" tag="a">home</router-link>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <router-link to="about" tag="a">about</router-link>
+
+    <div class="down">
+      <div class="down-tab">
+      <router-link to="/" tag="a">home</router-link>
+
+      <router-link to="about" tag="a">about</router-link>
+      <router-link to="about" tag="a">我的</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +25,15 @@ export default {
 </script>
 
 <style>
+.down {
+  position: absolute;
+  bottom : 1rem;
+  width: 100%;
+}
+.down-tab {
+  display: flex;
+  justify-content: space-around;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
