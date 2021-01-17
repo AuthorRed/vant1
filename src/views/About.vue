@@ -2,6 +2,7 @@
   <div class="about">
     <h1>This is an about page</h1>
     <van-uploader :after-read="afterRead" />
+    <div class="my_modal">模态框</div>
   </div>
 </template>
 <script>
@@ -36,3 +37,14 @@ export default {
   }
 }
 </script>
+<style lang="css" scoped>
+.my_modal {
+  width: 100%;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+</style>
