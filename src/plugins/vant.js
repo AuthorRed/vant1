@@ -1,5 +1,7 @@
 import Vue from 'vue'
-import Vant, { Locale } from 'vant'
-import 'vant/lib/index.css'
+import { Uploader,Tab, Tabs } from 'vant';
+import 'vant/lib/uploader/style';
 
-Vue.use(Vant)
+Vue.use(Uploader);
+Vue.use(Tab);
+Vue.use(Tabs);
