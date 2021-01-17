@@ -6,8 +6,8 @@
       <div class="down-tab">
       <router-link to="/" tag="a">home</router-link>
 
-      <router-link to="about" tag="a">about</router-link>
-      <router-link to="me" tag="a">我</router-link>
+      <router-link to="/about" tag="a">about</router-link>
+      <router-link to="/me" tag="a">我</router-link>
       </div>
     </div>
   </div>

@@ -21,7 +21,16 @@ const routes = [
   {
     path: '/me',
     name: 'Me',
-    component: () => import('../views/Me.vue')
+    component: () => import('../views/Me.vue'),
+    children:  [
+      {
+        path: 'cellContent',
+        name: 'CellContent',
+        component: () => import('../views/CellContent.vue')
+      }
+        
+      ]
+    
   }
 ]
 
