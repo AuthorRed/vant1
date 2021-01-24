@@ -1,9 +1,15 @@
 <template>
   <div class="me">
     <h1>个人页面</h1>
-      <router-link to="/me/cellContent" tag="a">
+      <router-link to="/me/loginForm" tag="a">
       <div class="cell">
-        <div class="title"><span>我的cell</span></div>
+        <div class="title"><span>登录</span></div>
+        <div class="islink"><span>&gt;</span></div>
+      </div>
+      </router-link>
+      <router-link to="/me/registerForm" tag="a">
+      <div class="cell">
+        <div class="title"><span>注册</span></div>
         <div class="islink"><span>&gt;</span></div>
       </div>
       </router-link>

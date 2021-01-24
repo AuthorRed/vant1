@@ -27,6 +27,16 @@ const routes = [
         path: 'cellContent',
         name: 'CellContent',
         component: () => import('../views/CellContent.vue')
+      },
+      {
+        path: 'loginForm',
+        name: 'LoginForm',
+        component: () => import('../views/LoginForm.vue')
+      },
+      {
+        path: 'registerForm',
+        name: 'RegisterForm',
+        component: () => import('../views/RegisterForm.vue')
       }
         
       ]
