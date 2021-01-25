@@ -1,6 +1,6 @@
 <template>
   <div class="me">
-    <h1>个人页面</h1>
+    <h1>个人页面:{{user?user.nickName:'未登录!'}}</h1>
       <router-link to="/me/loginForm" tag="a">
       <div class="cell">
         <div class="title"><span>登录</span></div>
@@ -21,14 +21,52 @@
 <script>
 import { getRequest, postFile, postRequest } from "@/api/http.js";
 export default {
+  data() {
+    return {
+      user: "",
+    };
+  }, 
   name: "me",
   // components: {
   //   EmojiPicker
   // }
   methods: {},
   mounted() {
-    console.log("mounted");
+    let user = {};
+    try {
+       user = JSON.parse(sessionStorage.getItem("user"));
+    } catch (error) {
+      console.log(error)
+    }
+    this.user=user;
+    // if(user){
+    //   console.log("user:",true);
+    //   console.log("user-true:",user);
+    // }else{
+    //   console.log("user:",false);
+    //   console.log("user-false:",user);
+    // }
+
   },
+  watch:{
+    $route(to,from){
+      console.log('from ',from);//从哪来
+      console.log('to ',to);//到哪去
+      if('true'==to.query.rgs){
+        console.log('to.query.rgs ',to.query.rgs);
+        let user = {};
+        let item = sessionStorage.getItem('user');
+        try {
+          user = JSON.parse(item);
+        } catch (error) {
+          console.log('error ',error);
+        }
+        if(user){
+          this.user = user;
+        }
+      }
+    }
+}
 };
 </script>
 <style lang="less" scoped>

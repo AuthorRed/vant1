@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { getRequest, postFile, postRequest } from "@/api/http.js";
+import { getRequest, postRequest } from "@/api/http.js";
 import { Toast } from "vant";
 export default {
   data() {
@@ -56,24 +56,32 @@ export default {
       fd.pwd = this.pwd;
       fd.nickName = this.nickName;
       console.log("fd", fd);
-      postRequest("http://localhost:8080/user/register",fd).then(res=>{
+      postRequest("http://192.168.1.11:8080/user/register",fd).then(res=>{
         console.log("res.data", res.data);
+        if(200==res.data.code){
+          let user = res.data.extenal.user;
+          sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user)); 
+          Toast.success("注册成功！");
+          this.$router.push('/me?rgs=true');
+        }else{
+          Toast.fail("注册失败:"+res.data.msg);
+        }
       });
     },
     back() {
-      this.$router.go(-1);
+       this.$router.push('/me?rgs=false');
     },
     // 异步校验函数返回 Promise
     asyncValidator(uid) {
-      console.log(uid);
-      getRequest("http://localhost:8080/user/countUID?uid=" + uid).then(
+      //console.log(uid);
+      getRequest("http://192.168.1.11:8080/user/countUID?uid=" + uid).then(
         (res) => {
-          console.log(res.data);
+          //console.log(res.data);
           let payload = res.data;
           if (200 == payload.code && payload.extenal.countUID == 0) {
             Toast.success("用户名可以使用！");
           } else {
-            console.log(this.uid);
+            //console.log(this.uid);
             this.uid = "";
             Toast.fail("用户名已存在，请更换！");
           }
