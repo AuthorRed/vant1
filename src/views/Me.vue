@@ -13,6 +13,18 @@
         <div class="islink"><span>&gt;</span></div>
       </div>
       </router-link>
+      <router-link to="/me/registerForm" tag="a">
+      <div class="cell">
+        <div class="title"><span>商品服务列表</span></div>
+        <div class="islink"><span>&gt;</span></div>
+      </div>
+      </router-link>
+      <router-link to="/me/registerForm" tag="a">
+      <div class="cell">
+        <div class="title"><span>添加商品服务</span></div>
+        <div class="islink"><span>&gt;</span></div>
+      </div>
+      </router-link>
     <transition name="slide">
       <router-view></router-view>
     </transition>
