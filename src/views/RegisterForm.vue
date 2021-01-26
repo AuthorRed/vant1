@@ -56,7 +56,7 @@ export default {
       fd.pwd = this.pwd;
       fd.nickName = this.nickName;
       console.log("fd", fd);
-      postRequest("http://192.168.1.11:8080/user/register",fd).then(res=>{
+      postRequest("/user/register",fd).then(res=>{
         console.log("res.data", res.data);
         if(200==res.data.code){
           let user = res.data.extenal.user;
@@ -74,7 +74,7 @@ export default {
     // 异步校验函数返回 Promise
     asyncValidator(uid) {
       //console.log(uid);
-      getRequest("http://192.168.1.11:8080/user/countUID?uid=" + uid).then(
+      getRequest("/user/countUID?uid=" + uid).then(
         (res) => {
           //console.log(res.data);
           let payload = res.data;

@@ -2,8 +2,9 @@ import axios from 'axios'
 import router from '@/router/index.js'
 
 const service = axios.create({
-  baseURL: '',
-  timeout: 10000,
+  // baseURL: 'http://192.168.1.11:8080',
+  baseURL: 'http://10.6.10.109:8080',
+  timeout: 5000,
   headers: {
     common: {
       'X-Requested-With': 'XMLHttpRequest'
