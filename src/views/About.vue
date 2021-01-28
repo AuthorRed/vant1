@@ -2,7 +2,9 @@
   <div class="about">
     <h1>This is an about page</h1>
     <van-uploader :after-read="afterRead" />
-    <div class="my_modal">模态框</div>
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 <script>
@@ -35,13 +37,31 @@ export default {
   }
 }
 </script>
-<style lang="css" scoped>
-.my_modal {
-  width: 100%;
-  height: 100vh;
-  background: rgba(0,0,0,0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 99;
+<style lang="less" scoped>
+@keyframes Rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
+.loader-container{
+  display: flex;
+  justify-content: center;
+  .loader {
+    width: 30px;
+    height: 30px;
+    border-top:2px solid red;
+    border-bottom:2px solid red;
+    border-left:2px solid rgb(243,243,243);
+    border-right:2px solid red;
+    border-radius: 50%;
+    animation: Rotate .6s linear infinite;
+  }
+
+}
+
+
+
+</style>
