@@ -8,6 +8,7 @@
 
       <router-link to="/about" tag="a">about</router-link>
       <router-link to="/me" tag="a">我</router-link>
+      <router-link to="/commodity" tag="a">商品</router-link>
       </div>
     </div>
   </div>

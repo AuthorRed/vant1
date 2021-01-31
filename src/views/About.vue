@@ -1,13 +1,18 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <van-uploader :after-read="afterRead" />
+    <van-uploader v-model="fileList" :after-read="afterRead" />
     <div class="my_modal">模态框</div>
   </div>
 </template>
 <script>
 import {getRequest,postFile,postRequest} from '@/api/http.js'
 export default {
+  data(){
+    return {
+      fileList:[]
+    }
+  },
    name: 'About',
   // components: {
   //   EmojiPicker
