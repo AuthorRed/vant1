@@ -45,7 +45,7 @@ export default {
       fd.uid = this.uid;
       fd.pwd = this.pwd;
       console.log("fd", fd);
-      postRequest("http://192.168.1.11:8080/user/login",fd).then(res=>{
+      postRequest("/user/login",fd).then(res=>{
         console.log("res.data", res.data);
         if(200==res.data.code){
           let user = res.data.extenal.user;
@@ -53,7 +53,7 @@ export default {
           Toast.success("登录成功！");
           this.$router.push('/me?rgs=true');
         }else{
-          Toast.fail("登录失败:"+res.data.msg);
+          Toast.fail(res.data.msg);
         }
       });
     },
