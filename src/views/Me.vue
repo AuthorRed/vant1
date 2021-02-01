@@ -1,29 +1,18 @@
 <template>
   <div class="me">
-    <h1>个人页面:{{user?user.nickName:'未登录!'}}</h1>
+    <!-- <h1>个人页面:{{user?user.nickName:'未登录!'}}</h1> -->
+    <van-nav-bar title="个人页面:" left-text="返回" right-text="按钮" left-arrow @click-left="back()">{{user?user.nickName:'未登录!'}}</van-nav-bar>
       <router-link to="/me/loginForm" tag="a">
-      <div class="cell">
-        <div class="title"><span>登录</span></div>
-        <div class="islink"><span>&gt;</span></div>
-      </div>
+        <van-cell title="登录" is-link  />
       </router-link>
       <router-link to="/me/registerForm" tag="a">
-      <div class="cell">
-        <div class="title"><span>注册</span></div>
-        <div class="islink"><span>&gt;</span></div>
-      </div>
+      <van-cell title="注册" is-link  />
+      </router-link>
+      <router-link to="/me/commodityList" tag="a">
+      <van-cell title="商品服务列表" is-link  />
       </router-link>
       <router-link to="/me/registerForm" tag="a">
-      <div class="cell">
-        <div class="title"><span>商品服务列表</span></div>
-        <div class="islink"><span>&gt;</span></div>
-      </div>
-      </router-link>
-      <router-link to="/me/registerForm" tag="a">
-      <div class="cell">
-        <div class="title"><span>添加商品服务</span></div>
-        <div class="islink"><span>&gt;</span></div>
-      </div>
+        <van-cell title="单元格" is-link  />
       </router-link>
     <transition name="slide">
       <router-view></router-view>
@@ -39,9 +28,7 @@ export default {
     };
   }, 
   name: "me",
-  // components: {
-  //   EmojiPicker
-  // }
+
   methods: {},
   mounted() {
     let user = {};
@@ -51,13 +38,6 @@ export default {
       console.log(error)
     }
     this.user=user;
-    // if(user){
-    //   console.log("user:",true);
-    //   console.log("user-true:",user);
-    // }else{
-    //   console.log("user:",false);
-    //   console.log("user-false:",user);
-    // }
 
   },
   watch:{
