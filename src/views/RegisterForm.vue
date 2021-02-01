@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <div class="back-arrow" @click="back()"><h1>&lt;</h1></div>
-
+    <van-nav-bar title="注册" left-text="返回" right-text="按钮" left-arrow @click-left="back()"/>
     <van-form @submit="onSubmit">
       <van-field
         v-model="uid"
@@ -28,9 +27,7 @@
         :rules="[{ required: true, message: '请填写密码' }]"
       />
       <div style="margin: 16px">
-        <van-button round block type="info" 
-          >提交</van-button
-        >
+        <van-button round block type="info">提交</van-button>
       </div>
     </van-form>
   </div>
@@ -56,37 +53,35 @@ export default {
       fd.pwd = this.pwd;
       fd.nickName = this.nickName;
       console.log("fd", fd);
-      postRequest("/user/register",fd).then(res=>{
+      postRequest("/user/register", fd).then((res) => {
         console.log("res.data", res.data);
-        if(200==res.data.code){
+        if (200 == res.data.code) {
           let user = res.data.extenal.user;
-          sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user)); 
+          sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user));
           Toast.success("注册成功！");
-          this.$router.push('/me?rgs=true');
-        }else{
-          Toast.fail("注册失败:"+res.data.msg);
+          this.$router.push("/me?rgs=true");
+        } else {
+          Toast.fail("注册失败:" + res.data.msg);
         }
       });
     },
     back() {
-       this.$router.push('/me?rgs=false');
+      this.$router.push("/me?rgs=false");
     },
     // 异步校验函数返回 Promise
     asyncValidator(uid) {
       //console.log(uid);
-      getRequest("/user/countUID?uid=" + uid).then(
-        (res) => {
-          //console.log(res.data);
-          let payload = res.data;
-          if (200 == payload.code && payload.extenal.countUID == 0) {
-            Toast.success("用户名可以使用！");
-          } else {
-            //console.log(this.uid);
-            this.uid = "";
-            Toast.fail("用户名已存在，请更换！");
-          }
+      getRequest("/user/countUID?uid=" + uid).then((res) => {
+        //console.log(res.data);
+        let payload = res.data;
+        if (200 == payload.code && payload.extenal.countUID == 0) {
+          Toast.success("用户名可以使用！");
+        } else {
+          //console.log(this.uid);
+          this.uid = "";
+          Toast.fail("用户名已存在，请更换！");
         }
-      );
+      });
     },
   },
   mounted() {
