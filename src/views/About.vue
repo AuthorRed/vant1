@@ -1,15 +1,10 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-<<<<<<< HEAD
-    <van-uploader v-model="fileList" :after-read="afterRead" />
-    <div class="my_modal">模态框</div>
-=======
     <van-uploader :after-read="afterRead" />
     <div class="loader-container">
       <div class="loader"></div>
     </div>
->>>>>>> 60eb9ae5f2e4c8c4545c3e3765fbc19a8c3b0d3d
   </div>
 </template>
 <script>
