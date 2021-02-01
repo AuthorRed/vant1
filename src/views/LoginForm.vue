@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <div class="back-arrow" @click="back()"><h1>&lt;</h1></div>
-
+    <van-nav-bar title="登陆" left-text="返回" right-text="按钮" left-arrow @click-left="back()"/>
     <van-form @submit="onSubmit">
       <van-field
         v-model="uid"
