@@ -1,15 +1,16 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <div class="container">
+      <router-view></router-view>
 
-    <div class="down">
-      <div class="down-tab">
-      <router-link to="/" tag="a">home</router-link>
-
-      <router-link to="/about" tag="a">about</router-link>
-      <router-link to="/me" tag="a">我</router-link>
-      <router-link to="/commodity" tag="a">商品</router-link>
+      <div  v-if="$route.path=='/me'||$route.path=='/' || $route.path=='/about'" class="down">
+        <div class="down-tab">
+        <router-link to="/" tag="a">home</router-link>
+        <router-link to="/about" tag="a">about</router-link>
+        <router-link to="/me" tag="a">我</router-link>
+        <router-link to="/commodity" tag="a">商品</router-link>
       </div>
+    </div>
     </div>
   </div>
 </template>

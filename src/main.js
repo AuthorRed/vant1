@@ -6,7 +6,7 @@ import './assets/css/reset.css'
 
 Vue.config.productionTip = false
 
-new Vue({
+Window.vm = new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
