@@ -28,14 +28,17 @@
   </div>
 </template>
 <script>
-import { postRequest } from "@/api/http.js";
+import { getRequest,postRequest } from "@/api/http.js";
 import { Toast } from "vant";
 export default {
   data() {
     return {
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      user: {},
+      list: [],
       loading: false,
       finished: false,
+      page:1,
+      rows:10,
     };
   },
   name: "CommodityList",
@@ -44,15 +47,45 @@ export default {
     back() {
       this.$router.push("/me");
     },
+    getUser() {
+      let user = {};
+      const cacheUser = sessionStorage.getItem("user");
+      if (cacheUser) {
+        try {
+          user = JSON.parse(cacheUser);
+        } catch (error) {
+          console.log(error);
+        }
+        this.user = user;
+        this.seller = user.uid;
+      }
+    },
     commodityAdd() {
       this.$router.push("/me/commodityList/commodityAdd");
     },
     onLoad() {
       console.log("loading..");
     },
+    getList(){
+      console.log('this.user.sellerId',this.user.uid);
+      getRequest("/commodity/list?",{page:this.page,rows:this.rows,seller:this.user.uid}).then((res) => {
+          console.log(res.data);
+          let payload = res.data;
+          if (200 == payload.code && payload.extenal.list) {
+            for(var item of payload.extenal.list){
+                console.log(item.id);
+            }
+            // this.list = payload.extenal.list
+          } else {
+            Toast.fail("加载数据出错！");
+          }
+        });
+    }
   },
   mounted() {
     console.log("mounted-CommodityList");
+    this.getUser()
+    this.getList();
   },
 };
 </script>
