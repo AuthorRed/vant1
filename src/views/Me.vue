@@ -8,17 +8,17 @@
         left-arrow
         @click-left="back()"
       ></van-nav-bar>
+      <router-link to="/me/commodityList" tag="a">
+        <van-cell title="商品服务列表" is-link />
+      </router-link>
       <router-link to="/me/loginForm" tag="a">
         <van-cell title="登录" is-link />
       </router-link>
       <router-link to="/me/registerForm" tag="a">
         <van-cell title="注册" is-link />
       </router-link>
-      <router-link to="/me/commodityList" tag="a">
-        <van-cell title="商品服务列表" is-link />
-      </router-link>
-      <router-link to="/me/registerForm" tag="a">
-        <van-cell title="单元格" is-link />
+      <router-link to="/me/goodsList" tag="a">
+        <van-cell title="goodsList" is-link />
       </router-link>
     </div>
     <transition name="slide">

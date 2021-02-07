@@ -3,7 +3,7 @@ import router from '@/router/index.js'
 
 const service = axios.create({
   // baseURL: 'http://192.168.1.11:8080',
-  baseURL: 'http://10.6.10.109:8080',
+  baseURL: 'http://127.0.0.1:8080',
   timeout: 5000,
   headers: {
     common: {
