@@ -3,7 +3,7 @@
     <div class="container">
       <router-view></router-view>
 
-      <div  v-if="$route.path=='/me'||$route.path=='/' || $route.path=='/about'" class="down">
+      <div  v-if="$route.path=='/me'||$route.path=='/'||$route.path=='/home' || $route.path=='/about'" class="down">
         <div class="down-tab">
         <router-link to="/" tag="a">home</router-link>
         <router-link to="/about" tag="a">about</router-link>

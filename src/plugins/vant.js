@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {Uploader,Tab, Tabs,Cell, CellGroup,Form,Field,Button,Toast,Swipe, SwipeItem,Search,NavBar,List,PullRefresh   } from 'vant';
+import {Uploader,Tab, Tabs,Cell, CellGroup,Form,Field,Button,Toast,Swipe, SwipeItem,Search,NavBar,List,PullRefresh,Icon   } from 'vant';
 import 'vant/lib/uploader/style';
 import 'vant/lib/cell/style';
 import 'vant/lib/cell-group/style';
@@ -28,3 +28,4 @@ Vue.use(Search);
 Vue.use(NavBar);
 Vue.use(List);
 Vue.use(PullRefresh);
+Vue.use(Icon);
