@@ -59,8 +59,6 @@ export default {
       page:1,
       rows:10,
       refreshing: false,
-      page: 1,
-      rows: 9,
       status: 1,
     };
   },
@@ -132,21 +130,6 @@ export default {
     },
     onLoad() {
       this.getList();
-    },
-    getList(){
-      console.log('this.user.sellerId',this.user.uid);
-      getRequest("/commodity/list?",{page:this.page,rows:this.rows,seller:this.user.uid}).then((res) => {
-          console.log(res.data);
-          let payload = res.data;
-          if (200 == payload.code && payload.extenal.list) {
-            for(var item of payload.extenal.list){
-                console.log(item.id);
-            }
-            // this.list = payload.extenal.list
-          } else {
-            Toast.fail("加载数据出错！");
-          }
-        });
     }
   },
   mounted() {
