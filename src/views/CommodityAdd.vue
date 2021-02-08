@@ -43,7 +43,7 @@ export default {
       price: "",
       seller: "",
       user: {},
-      uploader: [{ url: "https://img01.yzcdn.cn/vant/leaf.jpg" }],
+      uploader: [],
       commodityId:0,
     };
   },
@@ -82,8 +82,14 @@ export default {
       }
       let param = new FormData(); //创建form对象
       param.append('file',file.file);//通过append向form对象添加数据
-      postFile('http://localhost:8080/file/fileUpload',param).then(response=>{
-        console.log(response.data);
+      param.append('fid',this.commodityId);
+      postFile('http://localhost:8080/file/fileUpload',param).then(res=>{
+        console.log(res.data);
+        if (200 == res.data.code) {
+          Toast.success("上传成功！");
+        } else {
+          Toast.fail("上传失败:" + res.data.msg);
+        }
       })
     },
     onSubmit(values) {
@@ -97,9 +103,10 @@ export default {
       postRequest("/commodity/addCommodity", fd).then((res) => {
         console.log("res.data", res.data);
         if (200 == res.data.code) {
-          let user = res.data.extenal.user;
-          sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user));
+          // let user = res.data.extenal.user;
+          // sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user));
           Toast.success("添加成功！");
+          this.$parent.onRefresh();
           this.$router.push("/me/commodityList");
         } else {
           Toast.fail("添加失败:" + res.data.msg);
@@ -111,9 +118,9 @@ export default {
     },
   },
   mounted() {
+    console.log("mounted-CommodityAdd");
     this.getUser();
     this.getFid();
-    console.log("mounted-CommodityList");
   },
 };
 </script>

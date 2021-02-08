@@ -41,12 +41,18 @@ const routes = [
       {
         path: 'commodityList',
         name: 'CommodityList',
-        component: () => import('../views/CommodityList.vue'),
+        component: () => import('../views/CommodityList.vue')
+        ,
         children:  [
           {
             path: 'commodityAdd',
             name: 'CommodityAdd',
             component: () => import('../views/CommodityAdd.vue')
+          },
+          {
+            path: 'commodityDisplay/:id',
+            name: 'CommodityDisplay',
+            component: () => import('../views/CommodityDisplay.vue')
           }
         ]
       },
@@ -54,7 +60,12 @@ const routes = [
         path: 'registerForm',
         name: 'RegisterForm',
         component: () => import('../views/RegisterForm.vue')
-      }
+      },
+      {
+        path: 'goodsList',
+        name: 'GoodsList',
+        component: () => import('../views/GoodsList.vue')
+      },
         
       ]
     
