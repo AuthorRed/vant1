@@ -1,22 +1,21 @@
 <template>
   <div class="container">
     <form action="/">
-      <van-search v-model="searchValue" show-action  placeholder="请输入搜索关键词" @cancel="onCancel" >
+      <van-search
+        ref="searchInput"
+        v-model="keyWord"
+        show-action
+        placeholder="请输入搜索关键词"
+        @search="onSearch"
+        @cancel="back"
+      >
         <template #left>
           <div @click="back"><van-icon name="arrow-left" /></div>
         </template>
-
       </van-search>
     </form>
-      <van-nav-bar
-        title="商品"
-        left-text="返回"
-        right-text="添加商品"
-        left-arrow
-        @click-left="back()"
-        @click-right="commodityAdd"
-      />
-    <!-- <div v-if="$route.path == '/searchList'" class="content">
+
+    <div v-if="$route.path == '/searchList'" class="content">
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
         v-model="loading"
@@ -25,22 +24,22 @@
         @load="getList"
       >
         <div class="list">
-          <a  v-for="(item) in list" :key="item.commodity.id" 
+          <a  v-for="(item) in list" :key="item.id" 
             class="listItem"
             href="javascript:void(0)"
-            @click="gotoCommodity(item.commodity.id)"
+            @click="gotoCommodity(item.id)"
           >
             <div class="itemBox">
-              <img v-if="item.attach"
+              <img v-if="item.img_id"
                 :src="
                     'http://localhost:8080/file/getFileById?id=' +
-                   item.attach.id
+                   item.img_id
                   "
               />
               <div class="itemWord">
-                <h2>{{ item.commodity.title }}</h2>
-                <h3>{{ item.commodity.price }}</h3>
-                <p>{{ item.commodity.seller }}</p>
+                <h2>{{ item.title }}</h2>
+                <h3>{{ item.price }}</h3>
+                <p>{{ item.seller }}</p>
               </div>
             </div>
           </a>
@@ -48,7 +47,7 @@
       
       </van-list>
       </van-pull-refresh>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -57,28 +56,28 @@ import { Toast } from "vant";
 export default {
   data() {
     return {
-      searchValue:'',
+      keyWord: "",
       user: {},
       list: [],
       loading: false,
       finished: false,
-      page:1,
-      rows:10,
+      page: 1,
+      rows: 8,
       refreshing: false,
       status: 1,
     };
   },
   name: "SearchList",
-
   methods: {
     back() {
       this.$router.push("/");
     },
-    onCancel() {
-      Toast('取消');
+    onSearch() {
+      Toast("onSearch");
+      this.getList();
     },
     gotoCommodity(id) {
-      this.$router.push("/me/commodityList/commodityDisplay/"+id);
+      this.$router.push("/me/commodityList/commodityDisplay/" + id);
     },
     getUser() {
       let user = {};
@@ -95,43 +94,55 @@ export default {
     },
 
     onRefresh() {
+      if(!this.keyWord ||this.finished){
+        this.loading = false;
+        this.finished = true;
+        this.refreshing = false;
+        console.log('keyWord == null');
+        return;
+      }
       // 清空列表数据
-      this.list=[];
+      this.list = [];
       this.finished = false;
-      this.page =1;
+      this.page = 1;
       // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true;
-      this.onLoad();
+      this.getList();
     },
     getList() {
-      this.loading=true;
-      getRequest("/commodity/list?", {
+      if(!this.keyWord ){
+        this.loading = false;
+        // this.finished = true;
+        this.refreshing = false;
+        console.log('keyWord == null');
+        return;
+      }
+      // 将 loading 设置为 true，表示处于加载状态
+      // this.loading = true;
+      // this.list = [];
+      getRequest("/search/index?keyWord="+this.keyWord, {
         page: this.page,
         rows: this.rows,
-        status: this.status,
-        seller: this.user.uid,
+        // status: this.status,
+        // seller: this.user.uid,
       }).then((res) => {
-        // console.log('commodity/list:',res.data);
+        console.log('commodity/list:',res.data);
         let payload = res.data;
         if (200 == payload.code && payload.extenal.list) {
-          if(payload.extenal.list.length<1){
-            this.finished=true;
-          }else{
+          if (payload.extenal.list.length < 1 || payload.extenal.list.length <this.rows) {
+            this.finished = true;
+          } else {
             this.page++;
             // this.list = this.list.concat(payload.extenal.list);
-            for(let i=0;i<payload.extenal.list.length;i++){
-              this.list.push(payload.extenal.list[i]);
-            }
-            
           }
-          
+          for (let i = 0; i < payload.extenal.list.length; i++) {
+            this.list.push(payload.extenal.list[i]);
+          }
         } else {
-          this.finished=true;
+          this.finished = true;
         }
 
-        this.loading=false;
-        this.refreshing=false;
+        this.loading = false;
+        this.refreshing = false;
       });
     },
     commodityAdd() {
@@ -139,13 +150,21 @@ export default {
     },
     onLoad() {
       //this.getList();
-    }
+    },
   },
   mounted() {
     //this.getUser();
     //this.getList();
     console.log("mounted-SearchList");
+    console.log(this);
+    this.$refs.searchInput.focus();
   },
+  watch:{
+    keyWord: function (a, b) {
+      this.page = 1;
+      this.list = [];
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -158,7 +177,7 @@ export default {
   z-index: 99;
 }
 
-/* .list {
+ .list {
   .listItem {
     display:flex;
     position: relative;
@@ -197,6 +216,5 @@ export default {
       }
     }
   }
-} */
-
+} 
 </style>

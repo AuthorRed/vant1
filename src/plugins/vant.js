@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import {Uploader,Tab, Tabs,Cell, CellGroup,Form,Field,Button,Toast,Swipe, SwipeItem,Search,NavBar,List,PullRefresh,Icon   } from 'vant';
+import {Uploader,Tab, Tabs,Cell, CellGroup,Form,Field,Button,Toast,Swipe, SwipeItem,Search,NavBar,List,
+    PullRefresh,Icon,GoodsAction, GoodsActionIcon, GoodsActionButton   } from 'vant';
 import 'vant/lib/uploader/style';
 import 'vant/lib/cell/style';
 import 'vant/lib/cell-group/style';
@@ -12,6 +13,9 @@ import 'vant/lib/search/style';
 import 'vant/lib/nav-bar/style';
 import 'vant/lib/list/style';
 import 'vant/lib/pull-refresh/style';
+import 'vant/lib/goods-action/style';
+import 'vant/lib/goods-action-icon/style';
+import 'vant/lib/goods-action-button/style';
 
 Vue.use(Uploader);
 Vue.use(Tab);
@@ -29,3 +33,6 @@ Vue.use(NavBar);
 Vue.use(List);
 Vue.use(PullRefresh);
 Vue.use(Icon);
+Vue.use(GoodsAction);
+Vue.use(GoodsActionButton);
+Vue.use(GoodsActionIcon);

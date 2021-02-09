@@ -134,8 +134,6 @@ export default {
   },
   mounted() {
     this.getUser();
-    //this.getList();
-    // console.log("mounted-CommodityList");
   },
 };
 </script>

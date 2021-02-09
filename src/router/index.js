@@ -22,11 +22,11 @@ const routes = [
 
     ]
   },
-  {
-    path: '/commodity',
-    name: 'Commodity',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Commodity.vue')
-  },
+  // {
+  //   path: '/commodity',
+  //   name: 'Commodity',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/Commodity.vue')
+  // },
   {
     path: '/about',
     name: 'About',
@@ -64,7 +64,14 @@ const routes = [
           {
             path: 'commodityDisplay/:id',
             name: 'CommodityDisplay',
-            component: () => import('../views/CommodityDisplay.vue')
+            component: () => import('../views/CommodityDisplay.vue'),
+            children:  [
+              {
+                path: 'messageItem',
+                name: 'MessageItem',
+                component: () => import('../views/MessageItem.vue')
+              }
+            ]
           }
         ]
       },

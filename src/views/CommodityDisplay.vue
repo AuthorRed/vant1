@@ -1,23 +1,46 @@
 <template>
   <div class="container">
-    <van-nav-bar
-      title="添加商品"
-      left-text="返回"
-      left-arrow
-      @click-left="back()"
-    />
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(id, index) in imgList" :key="index">
-        <img
-          :src="'http://localhost:8080/file/getFileById?id=' + id"
-          width="100%"
-          height="200px"
-          style="display: block"
+    <div v-if="$route.path.indexOf('/messageItem') < 0" class="content">
+      <van-nav-bar
+        title="添加商品"
+        left-text="返回"
+        left-arrow
+        @click-left="back()"
+      />
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="(id, index) in imgList" :key="index">
+          <img
+            :src="'http://localhost:8080/file/getFileById?id=' + id"
+            width="100%"
+            height="200px"
+            style="display: block"
+          />
+        </van-swipe-item>
+      </van-swipe>
+      <h2>{{ commodity.title }}</h2>
+      <h3>￥:{{ commodity.price }}</h3>
+
+      <van-goods-action>
+        <van-goods-action-icon
+          icon="chat-o"
+          text="客服"
+          @click="toCustomerService"
         />
-      </van-swipe-item>
-    </van-swipe>
-    <h2>{{ commodity.title }}</h2>
-    <h3>￥:{{ commodity.price }}</h3>
+        <van-goods-action-icon
+          icon="shop-o"
+          text="店铺"
+          @click="toSellerShop"
+        />
+        <van-goods-action-button
+          type="danger"
+          text="立即购买"
+          @click="toPlaceOrder"
+        />
+      </van-goods-action>
+    </div>
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 <script>
@@ -30,11 +53,34 @@ export default {
       imgList: [],
       commodityId: 0,
       commodity: {},
+      seller:'',
     };
   },
   name: "CommodityDisplay",
 
   methods: {
+    /* toCustomerService() {
+      this.$router.push(
+        "/me/commodityList/commodityDisplay/" +
+          this.$route.params.id +
+          "/messageItem"
+      );
+    }, */
+    toCustomerService() {
+      this.$router.push({
+          name:"MessageItem",
+          params:{
+            seller:this.seller
+          }
+        }
+      );
+    },
+    toSellerShop() {
+      console.log("toSellerShop");
+    },
+    toPlaceOrder() {
+      console.log("toPlaceOrder");
+    },
     getUser() {
       let user = {};
       const cacheUser = sessionStorage.getItem("user");
@@ -87,6 +133,19 @@ export default {
   position: absolute;
   top: 0;
   z-index: 99;
+}
+
+.slide-enter,
+.slide-leave-to {
+  right: -100%;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: right 0.15s linear;
+}
+.slide-enter-to,
+.slide-leave {
+  right: 0;
 }
 
 h2 {
