@@ -19,7 +19,7 @@
       </van-swipe>
       <h2>{{ commodity.title }}</h2>
       <h3>￥:{{ commodity.price }}</h3>
-
+      <h2>{{ commodity.seller }}</h2>
       <van-goods-action>
         <van-goods-action-icon
           icon="chat-o"
@@ -53,7 +53,6 @@ export default {
       imgList: [],
       commodityId: 0,
       commodity: {},
-      seller:'',
     };
   },
   name: "CommodityDisplay",
@@ -70,7 +69,7 @@ export default {
       this.$router.push({
           name:"MessageItem",
           params:{
-            seller:this.seller
+            seller:this.commodity.seller
           }
         }
       );
@@ -91,7 +90,6 @@ export default {
           console.log(error);
         }
         this.user = user;
-        this.seller = user.uid;
       }
     },
     getCommodity() {
@@ -109,7 +107,8 @@ export default {
       });
     },
     back() {
-      this.$router.push("/me/commodityList");
+      // this.$router.push("/me/commodityList");
+      this.$router.go(-1);
     },
   },
   mounted() {

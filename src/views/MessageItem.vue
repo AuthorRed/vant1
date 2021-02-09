@@ -6,8 +6,15 @@
       left-arrow
       @click-left="back()"
     />
-    <input v-model="message" type="text">
-    <button @click="websocketsend">发送</button>
+    <div class="msgArea">
+      <div v-for="(item,index) in msgList" :key="index">
+        {{item}}
+      </div>
+    </div>
+    <div class="inputArea">
+      <input v-model="message" type="text">
+      <button @click="websocketsend">发送</button>
+    </div>
   </div>
 </template>
 <script>
@@ -19,6 +26,7 @@ export default {
         websock: null,
         seller:'',
         message:'',
+        msgList:[],
       }
     },
     created() {
@@ -29,6 +37,7 @@ export default {
     },
     mounted(){
       this.seller = this.$route.params.seller;
+      console.log('seller',this.seller);
       this.getUser();
     },
     methods: {
@@ -42,7 +51,6 @@ export default {
             console.log(error);
           }
           this.user = user;
-          this.seller = user.uid;
         }
       },
       back() {
@@ -57,22 +65,23 @@ export default {
         this.websock.onclose = this.websocketclose;
       },
       websocketonopen(){ //连接建立之后执行send方法发送数据
-        let actions = {"test":"12345"};
-        this.websocketsend(JSON.stringify(actions));
+        // this.websocketsend(JSON.stringify(actions));
       },
       websocketonerror(){//连接建立失败重连
         this.initWebSocket();
       },
       websocketonmessage(e){ //数据接收
-        // const redata = JSON.parse(e.data);
-        console.log(e);
+        console.log('收到数据',e.data);
+        this.msgList.push(e.data);
       },
       websocketsend(){//数据发送
+      console.log('seller',this.seller);
         let data={};
         data.message = this.message;
         data.from = this.user.uid;
         data.to = this.seller;
         this.websock.send(JSON.stringify(data));
+        this.message='';
       },
       websocketclose(e){  //关闭
         console.log('断开连接',e);
@@ -95,5 +104,14 @@ export default {
   z-index: 99;
 }
 
+.inputArea {
+  position: fixed;
+  bottom : 0rem;
+  width: 100%;
+    input {
+      width: 70%;
+    }
+
+}
 
 </style>
