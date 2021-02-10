@@ -5,13 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    count: 5,
-    websocket:null,
+    // count: 5,
+    // websocket:null,
   },
   mutations: {
-    setWebsocket (state,websocket) {
+/*     setWebsocket (state,websocket) {
       state.websocket=websocket;
-    }
+    } */
   },
   actions :{
     /* initWebsocket(context) {

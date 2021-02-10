@@ -10,9 +10,10 @@
       <div class="list">
         <a
           v-for="item in list"
-          :key="item.id"
+          :key="item.to"
           class="listItem"
           href="javascript:void(0)"
+          @click="toMessageItem(item.to)"
         >
           <div class="itemBox">
             <img
@@ -21,29 +22,80 @@
             />
             <img v-if="!item.img_id" src="/assets/logo.png" />
             <div class="itemWord">
-              <h2>{{ item.title }}</h2>
-              <h3>{{ item.price }}</h3>
-              <p>{{ item.seller }}</p>
+              <h2>{{ item.from }}</h2>
+              <h3>{{ item.to }}</h3>
+              <p>{{ item.date }}</p>
             </div>
           </div>
         </a>
       </div>
     </div>
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 <script>
 import { getRequest } from "@/api/http.js";
 export default {
+  name: "MessageList",
   data() {
     return {
+      websock: null,
       user: {},
       list: [],
     };
   },
-  name: "SearchList",
+  created() {
+    setTimeout(() => {
+      this.initWebSocket();
+    }, 1000);
+    },
+    destroyed() {
+      this.websock.close() //离开路由之后断开websocket连接
+    }, 
   methods: {
+    initWebSocket(){ //初始化weosocket
+        console.log('uid',this.user.uid);
+        const wsuri = "ws://127.0.0.1:8081/webSocket/"+this.user.uid;
+        console.log(wsuri);
+        this.websock = new WebSocket(wsuri);
+        this.websock.onmessage = this.websocketonmessage;
+        this.websock.onopen = this.websocketonopen;
+        this.websock.onerror = this.websocketonerror;
+        this.websock.onclose = this.websocketclose;
+      },
+      websocketonopen(){ //连接建立之后执行send方法发送数据
+        // this.websocketsend(JSON.stringify(actions));
+      },
+      websocketonerror(){//连接建立失败重连
+        this.initWebSocket();
+      },
+      websocketonmessage(e){ //数据接收
+        console.log('收到数据',e.data);
+        this.list.push(e.data);
+      },
+      websocketsend(){//数据发送
+        let data={};
+        data.message = '测试手动发送。。';
+        data.from = this.user.uid;
+        data.to = '22',
+        this.websock.send(JSON.stringify(data));
+        // this.message='';
+      },
+      websocketclose(e){  //关闭
+        console.log('断开连接',e);
+      },
     back() {
       this.$router.go(-1);
+    },
+    toMessageItem(to){
+      this.$router.push({
+          name:"MessageItem",
+          params:{
+            to:to
+          }
+        });
     },
     getUser() {
       let user = {};
@@ -55,16 +107,31 @@ export default {
           console.log(error);
         }
         this.user = user;
-        this.seller = user.uid;
       }
     },
   },
   mounted() {
     this.getUser();
+    setTimeout(() => {
+      this.websocketsend();
+    }, 2000);
   },
 };
 </script>
 <style lang="less" scoped>
+.slide-enter,
+.slide-leave-to {
+  right: -100%;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: right 0.15s linear;
+}
+.slide-enter-to,
+.slide-leave {
+  right: 0;
+}
+
 .container {
   width: 100%;
 

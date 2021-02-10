@@ -1,7 +1,6 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <span>{{$store.state.count}}</span>
     <van-uploader :after-read="afterRead" />
     <div class="loader-container">
       <div class="loader"></div>
@@ -40,7 +39,6 @@ export default {
   },
   mounted (){
     console.log('mounted-about');
-    this.$root.methods.initWebsocket();
   }
 }
 </script>

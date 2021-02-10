@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+    component: () => import('../views/Home.vue'),
     children :[
       {
         path: '/searchList',
@@ -30,7 +30,14 @@ const routes = [
   {
     path: '/messageList',
     name: 'MessageList',
-    component: () => import( '../views/MessageList.vue')
+    component: () => import( '../views/MessageList.vue'),
+    children:  [
+      {
+        path: 'messageItem',
+        name: 'MessageItem',
+        component: () => import('../views/MessageItem.vue')
+      },
+    ]
   },
   {
     path: '/me',

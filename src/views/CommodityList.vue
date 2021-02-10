@@ -138,6 +138,19 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.slide-enter,
+.slide-leave-to {
+  right: -100%;
+}
+.slide-enter-active,
+.slide-leave-active {
+  transition: right 0.15s linear;
+}
+.slide-enter-to,
+.slide-leave {
+  right: 0;
+}
+
 .container {
   width: 100%;
   background: rgb(243, 243, 243);
