@@ -4,163 +4,95 @@
       title="添加商品"
       left-text="返回"
       left-arrow
-      @click-left="back()"
+      @click-left="back()"  
     />
     <div class="msgArea">
-      <div v-for="(item,index) in msgList" :key="index">
-        {{item}}
+      <div v-for="(item, index) in msgList" :key="index">
+        <div class="others">
+          <span>{{ item.from }}:</span>
+          <span>{{ item.message }}</span>
+          <span>{{ item.date|formatDate }}</span>
+        </div>
       </div>
     </div>
     <div class="inputArea">
-      <input v-model="message" type="text">
-      <button @click="websocketsend">发送</button>
+      <input v-model="message" type="text"  @keyup.enter="send()"/>
+      <button @click="send">发送</button>
     </div>
   </div>
 </template>
 <script>
 export default {
-    name : 'test',
-    data() {
-      return {
-        user: {},
-        websock: null,
-        seller:'',
-        message:'',
-        msgList:[],
+  name: "MessageItem",
+  props: {
+    to: String,
+    msgList: Array,
+  },
+  data() {
+    return {
+      // to: "",
+      user: {},
+      seller: "",
+      message: "",
+      // msgList: [],
+    };
+  },
+  mounted() {
+    // this.to = this.$route.params.to;
+    // console.log("to", this.to);
+    this.getUser();
+  },
+  methods: {
+    send() {
+      let data = {};
+      data.message = this.message;
+      data.from = this.user.uid;
+      (data.to = this.to), this.$parent.websocketsend(data);
+      this.message = "";
+    },
+    getUser() {
+      let user = {};
+      const cacheUser = sessionStorage.getItem("user");
+      if (cacheUser) {
+        try {
+          user = JSON.parse(cacheUser);
+        } catch (error) {
+          console.log(error);
+        }
+        this.user = user;
       }
     },
-    created() {
-      this.initWebSocket();
-    },
-    destroyed() {
-      this.websock.close() //离开路由之后断开websocket连接
-    },
-    mounted(){
-      this.seller = this.$route.params.seller;
-      console.log('seller',this.seller);
-      this.getUser();
-    },
-    methods: {
-      getUser() {
-        let user = {};
-        const cacheUser = sessionStorage.getItem("user");
-        if (cacheUser) {
-          try {
-            user = JSON.parse(cacheUser);
-          } catch (error) {
-            console.log(error);
-          }
-          this.user = user;
-        }
-      },
-      back() {
-      this.$router.go(-1);
-      },
-      initWebSocket(){ //初始化weosocket
-        const wsuri = "ws://127.0.0.1:8081/webSocket/22";
-        this.websock = new WebSocket(wsuri);
-        this.websock.onmessage = this.websocketonmessage;
-        this.websock.onopen = this.websocketonopen;
-        this.websock.onerror = this.websocketonerror;
-        this.websock.onclose = this.websocketclose;
-      },
-      websocketonopen(){ //连接建立之后执行send方法发送数据
-        // this.websocketsend(JSON.stringify(actions));
-      },
-      websocketonerror(){//连接建立失败重连
-        this.initWebSocket();
-      },
-      websocketonmessage(e){ //数据接收
-        console.log('收到数据',e.data);
-        this.msgList.push(e.data);
-      },
-      websocketsend(){//数据发送
-      console.log('seller',this.seller);
-        let data={};
-        data.message = this.message;
-        data.from = this.user.uid;
-        data.to = this.seller;
-        this.websock.send(JSON.stringify(data));
-        this.message='';
-      },
-      websocketclose(e){  //关闭
-        console.log('断开连接',e);
-      },
-    },
-  }
-</script>
-<script>
-/* export default {
-    name : 'test',
-    data() {
-      return {
-        user: {},
-        websock: null,
-        seller:'',
-        message:'',
-        msgList:[],
+    back() {
+      this.$parent.currentToUser='';
+      this.$parent.currentToUserList=[];
+      if (this.$parent.showMessageItem) {
+        this.$parent.showMessageItem = false;
       }
     },
-    created() {
-      this.initWebSocket();
+  },
+  filters: {
+    formatDate: function (value) {
+      if (!value) {
+        return "";
+      }
+      let date = new Date(value);
+      let y = date.getFullYear();
+      let MM = date.getMonth() + 1;
+      MM = MM < 10 ? "0" + MM : MM;
+      let d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      let m = date.getMinutes();
+      m = m < 10 ? "0" + m : m;
+      let s = date.getSeconds();
+      s = s < 10 ? "0" + s : s;
+      return y + "-" + MM + "-" + d + " " + h + ":" + m + ":" + s;
     },
-    destroyed() {
-      this.websock.close() //离开路由之后断开websocket连接
-    },
-    mounted(){
-      this.seller = this.$route.params.seller;
-      console.log('seller',this.seller);
-      this.getUser();
-    },
-    methods: {
-      getUser() {
-        let user = {};
-        const cacheUser = sessionStorage.getItem("user");
-        if (cacheUser) {
-          try {
-            user = JSON.parse(cacheUser);
-          } catch (error) {
-            console.log(error);
-          }
-          this.user = user;
-        }
-      },
-      back() {
-      this.$router.go(-1);
-      },
-      initWebSocket(){ //初始化weosocket
-        const wsuri = "ws://127.0.0.1:8081/webSocket/22";
-        this.websock = new WebSocket(wsuri);
-        this.websock.onmessage = this.websocketonmessage;
-        this.websock.onopen = this.websocketonopen;
-        this.websock.onerror = this.websocketonerror;
-        this.websock.onclose = this.websocketclose;
-      },
-      websocketonopen(){ //连接建立之后执行send方法发送数据
-        // this.websocketsend(JSON.stringify(actions));
-      },
-      websocketonerror(){//连接建立失败重连
-        this.initWebSocket();
-      },
-      websocketonmessage(e){ //数据接收
-        console.log('收到数据',e.data);
-        this.msgList.push(e.data);
-      },
-      websocketsend(){//数据发送
-      console.log('seller',this.seller);
-        let data={};
-        data.message = this.message;
-        data.from = this.user.uid;
-        data.to = this.seller;
-        this.websock.send(JSON.stringify(data));
-        this.message='';
-      },
-      websocketclose(e){  //关闭
-        console.log('断开连接',e);
-      },
-    },
-  } */
+  },
+};
 </script>
+
 <style lang="less" scoped>
 .container {
   .back-arrow {
@@ -178,12 +110,14 @@ export default {
 
 .inputArea {
   position: fixed;
-  bottom : 0rem;
+  bottom: 0rem;
   width: 100%;
-    input {
-      width: 70%;
-    }
-
+  input {
+    width: 70%;
+  }
 }
-
+.others {
+  display: flex;
+  justify-content: space-between;
+}
 </style>

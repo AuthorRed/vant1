@@ -31,13 +31,13 @@ const routes = [
     path: '/messageList',
     name: 'MessageList',
     component: () => import( '../views/MessageList.vue'),
-    children:  [
+    /* children:  [
       {
         path: 'messageItem',
         name: 'MessageItem',
         component: () => import('../views/MessageItem.vue')
       },
-    ]
+    ] */
   },
   {
     path: '/me',

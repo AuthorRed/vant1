@@ -1,42 +1,52 @@
 <template>
   <div class="container">
-    <div v-if="$route.path == '/messageList'" class="content">
+    <div v-if="!this.showMessageItem" class="content">
       <van-nav-bar
         title="消息"
         left-text="返回"
         left-arrow
         @click-left="back()"
       />
+      <button @click="checkIfNewUserToExtend('11')">添加与11对话</button>
+      <button @click="checkIfNewUserToExtend('22')">添加与22对话</button>
+      <button @click="checkIfNewUserToExtend('33')">添加与33对话</button>
+
       <div class="list">
         <a
-          v-for="item in list"
-          :key="item.to"
+          v-for="toUser in list"
+          :key="toUser"
           class="listItem"
           href="javascript:void(0)"
-          @click="toMessageItem(item.to)"
+          @click="toMessageItem(toUser)"
         >
           <div class="itemBox">
             <img
-              v-if="item.img_id"
-              :src="'http://localhost:8080/file/getFileById?id=' + item.img_id"
+              v-if="toUser.img_id"
+              :src="
+                'http://localhost:8080/file/getFileById?id=' + toUser.img_id
+              "
             />
-            <img v-if="!item.img_id" src="/assets/logo.png" />
+            <img v-if="!toUser.img_id" src="../assets/logo.png" />
             <div class="itemWord">
-              <h2>{{ item.from }}</h2>
-              <h3>{{ item.to }}</h3>
-              <p>{{ item.date }}</p>
+              <h3>to:{{ toUser }}</h3>
             </div>
           </div>
         </a>
       </div>
     </div>
     <transition name="slide">
-      <router-view></router-view>
+      <!-- <router-view></router-view> -->
+      <message-item
+        v-if="this.showMessageItem"
+        :to="currentToUser"
+        :msgList="currentToUserList"
+      ></message-item>
     </transition>
   </div>
 </template>
 <script>
 import { getRequest } from "@/api/http.js";
+import MessageItem from "@/views/MessageItem.vue";
 export default {
   name: "MessageList",
   data() {
@@ -44,58 +54,117 @@ export default {
       websock: null,
       user: {},
       list: [],
+      showMessageItem: false,
+      map: new Map(),
+      currentToUser: "",
+      currentToUserList:[],
     };
+  },
+  components: {
+    "message-item": MessageItem,
   },
   created() {
     setTimeout(() => {
       this.initWebSocket();
     }, 1000);
-    },
-    destroyed() {
-      this.websock.close() //离开路由之后断开websocket连接
-    }, 
+  },
+  destroyed() {
+    this.websock.close(); //离开路由之后断开websocket连接
+  },
   methods: {
-    initWebSocket(){ //初始化weosocket
-        console.log('uid',this.user.uid);
-        const wsuri = "ws://127.0.0.1:8081/webSocket/"+this.user.uid;
-        console.log(wsuri);
-        this.websock = new WebSocket(wsuri);
-        this.websock.onmessage = this.websocketonmessage;
-        this.websock.onopen = this.websocketonopen;
-        this.websock.onerror = this.websocketonerror;
-        this.websock.onclose = this.websocketclose;
-      },
-      websocketonopen(){ //连接建立之后执行send方法发送数据
-        // this.websocketsend(JSON.stringify(actions));
-      },
-      websocketonerror(){//连接建立失败重连
-        this.initWebSocket();
-      },
-      websocketonmessage(e){ //数据接收
-        console.log('收到数据',e.data);
-        this.list.push(e.data);
-      },
-      websocketsend(){//数据发送
-        let data={};
-        data.message = '测试手动发送。。';
-        data.from = this.user.uid;
-        data.to = '22',
-        this.websock.send(JSON.stringify(data));
-        // this.message='';
-      },
-      websocketclose(e){  //关闭
-        console.log('断开连接',e);
-      },
+    pushMap2currentToUserList() {
+      this.list = [];
+      for (let key of this.map.keys()) {
+        this.list.push(key);
+      }
+    },
+    pushMap2List() {
+      this.list = [];
+      for (let key of this.map.keys()) {
+        this.list.push(key);
+      }
+    },
+    checkIfNewUserToExtend(uid) {
+      let messageItem = {};
+      messageItem.from = this.user.uid;
+      messageItem.to = uid;
+      messageItem.message = '开启对话';
+      if(this.map.has(uid)){
+        //如果已经有过会话的直接返回
+        return
+      }else{
+        //如果没有的，要扩展list
+        this.map.set(uid, [messageItem]);
+        console.log("map", this.map);
+        this.pushMap2List();
+        // this.list.push(messageItem);
+      }
+    },
+    initWebSocket() {
+      //初始化weosocket
+      console.log("uid", this.user.uid);
+      const wsuri = "ws://127.0.0.1:8081/webSocket/" + this.user.uid;
+      console.log(wsuri);
+      this.websock = new WebSocket(wsuri);
+      this.websock.onmessage = this.websocketonmessage;
+      this.websock.onopen = this.websocketonopen;
+      this.websock.onerror = this.websocketonerror;
+      this.websock.onclose = this.websocketclose;
+    },
+    websocketonopen() {
+      //连接建立之后执行send方法发送数据
+      // this.websocketsend(JSON.stringify(actions));
+    },
+    websocketonmessage(e) {
+      //数据接收
+      console.log("收到数据", e.data);
+      let msg = JSON.parse(e.data) ;
+      if (!msg || !msg.from) {
+        console.log("信息来源缺失");
+        return;
+      }
+      if (this.map.has(msg.from)) {
+        let userMsgList = this.map.get(msg.from);
+        userMsgList.push(msg);
+      } else {
+        this.map.set(msg.from, [msg]);
+        this.pushMap2List();
+      }
+      // if(this.currentToUser==msg.from){
+      //   this.currentToUserList.push(msg);
+      // }
+    },
+    websocketonerror() {
+      //连接建立失败重连
+      this.initWebSocket();
+    },
+    
+    websocketsend(data) {
+      let currentToUserList = this.map.get(data.to);
+      currentToUserList.push(data);
+      this.currentToUserList = currentToUserList;
+      //数据发送
+      this.websock.send(JSON.stringify(data));
+      console.log("发送信息", JSON.stringify(data));
+      // this.message='';
+    },
+    websocketclose(e) {
+      //关闭
+      console.log("断开连接", e);
+    },
     back() {
       this.$router.go(-1);
     },
-    toMessageItem(to){
-      this.$router.push({
+    toMessageItem(to) {
+      this.currentToUser = to;
+      this.currentToUserList = this.map.get(to);
+      this.showMessageItem = true;
+      /* this.$router.push({
           name:"MessageItem",
           params:{
             to:to
           }
-        });
+        }); */
     },
     getUser() {
       let user = {};
@@ -112,9 +181,6 @@ export default {
   },
   mounted() {
     this.getUser();
-    setTimeout(() => {
-      this.websocketsend();
-    }, 2000);
   },
 };
 </script>
