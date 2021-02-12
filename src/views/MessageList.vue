@@ -215,8 +215,8 @@ export default {
     .itemBox {
       display: flex;
       img {
-        width: 7rem;
-        height: 7rem;
+        width: 4rem;
+        height: 4rem;
         border-radius: 0.5rem;
       }
       .itemWord {
