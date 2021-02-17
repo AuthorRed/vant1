@@ -27,13 +27,13 @@
           </p>
         </div>
       </div>
-    </div>
-
-    <div class="content">
       <van-tabs @click="onClick">
         <van-tab v-for="item in categoryList" :key="item" :title="item">
         </van-tab>
       </van-tabs>
+    </div>
+
+    <div class="content">
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
         <van-list
           v-model="loading"
@@ -49,7 +49,19 @@
               href="javascript:void(0)"
               @click="gotoCommodity(item.commodity.id)"
             >
-              <div class="itemBox">
+              <van-card
+                num="1"
+                :price="item.commodity.price"
+                desc="描述信息"
+                :title="item.commodity.title"
+                :thumb=" 'http://localhost:8080/file/getFileById?id=' + item.attach.id"
+              >
+                <template #footer>
+                  <van-stepper v-model="amount" min="0" max="100" />
+                </template>
+              </van-card>
+
+              <!-- <div class="itemBox">
                 <img
                   v-if="item.attach"
                   :src="
@@ -62,7 +74,7 @@
                   <h3>{{ item.commodity.price }}</h3>
                   <p>{{ item.commodity.seller }}</p>
                 </div>
-              </div>
+              </div> -->
             </a>
           </div>
         </van-list>
@@ -100,11 +112,12 @@ export default {
       categoryList: [],
 
       show: false,
+      amount: 0,
     };
   },
   name: "CommodityList",
-  components:{
-    'buy-cart':BuyCart,
+  components: {
+    "buy-cart": BuyCart,
   },
   methods: {
     showPopup() {
@@ -208,9 +221,7 @@ export default {
   right: 0;
 }
 
-.van-tabs__wrap {
-  height: 30px !important;
-}
+
 .popupcontainer {
   width: 100%;
   background: rgb(243, 243, 243);
@@ -219,13 +230,10 @@ export default {
   z-index: 99;
 
   .header {
-    position: fixed;
-    z-index: 0;
-    width: 100%;
-    height: 18vh;
-    display: block;
-    background-color: #fff;
-    overflow: hidden;
+    position: sticky;
+    top: 0;
+
+
     .logo {
       display: flex;
       .right {
@@ -269,12 +277,22 @@ export default {
   .content {
     width: 100%;
     position: absolute;
-    top: 7.7rem;
+      
     .list {
       .listItem {
         display: flex;
         position: relative;
         width: 100%;
+
+        .van-card {
+          width: 100%;
+        }
+        .van-card__content {
+          text-align: start;
+        }
+        .van-card__price {
+          color: red;
+        }
         .itemBox {
           display: flex;
           img {
@@ -312,33 +330,33 @@ export default {
     }
   }
 
-  .buyCart {
-    position: fixed;
-    bottom: 0.5rem;
-    background-color: rgba(0, 0, 0, 0.7);
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    height: 2rem;
-    border-radius: 1rem;
+  // .buyCart {
+  //   position: fixed;
+  //   bottom: 0.5rem;
+  //   background-color: rgba(0, 0, 0, 0.7);
+  //   width: 100%;
+  //   display: flex;
+  //   justify-content: center;
+  //   height: 2rem;
+  //   border-radius: 1rem;
 
-    .left {
-      color: #fff;
-      width: 70%;
-    }
-    .right {
-      color: darkblue;
-      width: 30%;
-      background-color: gold;
-      text-align: center;
-      line-height: 2rem;
-      border-top-right-radius: 1rem;
-      border-bottom-right-radius: 1rem;
-    }
+  //   .left {
+  //     color: #fff;
+  //     width: 70%;
+  //   }
+  //   .right {
+  //     color: darkblue;
+  //     width: 30%;
+  //     background-color: gold;
+  //     text-align: center;
+  //     line-height: 2rem;
+  //     border-top-right-radius: 1rem;
+  //     border-bottom-right-radius: 1rem;
+  //   }
 
-    .van-overlay {
-      height: 80%;
-    }
-  }
+  //   .van-overlay {
+  //     height: 80%;
+  //   }
+  // }
 }
 </style>
