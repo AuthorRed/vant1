@@ -1,4 +1,3 @@
-import axios from 'axios'
 import QS from 'qs'
 import http from '../utils/request'
 function IEVersion() {
@@ -49,30 +48,7 @@ export function getRequest(url, data = {}) {
     });
 }
 
-// export function fetch(url, params = {}) {
 
-//     return new Promise((resolve, reject) => {
-//         axios.get(url, {
-//             params: params
-//         })
-//             .then(response => {
-//                 resolve(response.data);
-//             })
-//             .catch(err => {
-//                 reject(err)
-//             })
-//     })
-// }
-// export function post(url, data = {}) {
-//     return new Promise((resolve, reject) => {
-//         axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
-//             .then(response => {
-//                 resolve(response.data);
-//             }, err => {
-//                 reject(err);
-//             })
-//     })
-// }
 //封装post请求
 export function postRequest(url, data = {}) {
     return new Promise((resolve, reject) => {

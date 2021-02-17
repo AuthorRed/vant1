@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router/index.js'
+import store from '@/store/store.js'
 
 const service = axios.create({
   // baseURL: 'http://192.168.1.11:8080',
@@ -19,10 +20,12 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    if (sessionStorage.getItem("token")) {  // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
+    /* if (sessionStorage.getItem("token")) {  // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         config.headers['Authorization']= sessionStorage.getItem("token");
+    } */
+    if (store.state.user) {  // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
+      config.headers['Authorization']= store.state.user.token;
     }
-
     return config
   },
   error => {

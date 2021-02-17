@@ -2,23 +2,39 @@
   <div class="me">
     <!-- <h1>个人页面:{{user?user.nickName:'未登录!'}}</h1> -->
     <div v-if="$route.path=='/me'" class="container">
-      <van-nav-bar
-        :title="userTitle"
+      <!-- <van-nav-bar
+        title="个人页面"
         left-text="返回"
         left-arrow
         @click-left="back()"
-      ></van-nav-bar>
-      <router-link to="/me/commodityList" tag="a">
-        <van-cell title="商品服务列表" is-link />
-      </router-link>
+        right-text="注销"
+        @click-right="logout()"
+      ></van-nav-bar> -->
+      <div>
+        <div class="currentUser">
+
+          <img src="../assets/logo.png" alt="" >
+          <h2>{{$store.state.user ? $store.state.user.uid:'未登录'}} &nbsp;&nbsp;&nbsp; <van-icon name="setting-o" @click="logout()"/></h2>
+          
+          </div>
+        <div class="collections"> 收藏|评价</div>
+      </div>
       <router-link to="/me/loginForm" tag="a">
+      <van-divider />
         <van-cell title="登录" is-link />
+        <van-divider />
       </router-link>
       <router-link to="/me/registerForm" tag="a">
         <van-cell title="注册" is-link />
+        <van-divider />
       </router-link>
       <router-link to="/me/goodsList" tag="a">
         <van-cell title="goodsList" is-link />
+        <van-divider />
+      </router-link>
+      <router-link to="/me/commodityList" tag="a">
+        <van-cell title="商品服务列表" is-link />
+        <van-divider />
       </router-link>
     </div>
     <transition name="slide">
@@ -40,12 +56,12 @@ export default {
     userTitle: {
       get:function () {
         let userTitle = "个人页面";
-        if (this.user) {
-          userTitle =userTitle+ ":" + this.user.nickName;
+        if (this.$store.user) {
+          userTitle =userTitle+ ":" + this.$store.user.nickName;
         }
         return userTitle;
       },
-      set:function(){
+      set:function(user){
 
       }
     }
@@ -53,6 +69,9 @@ export default {
   methods: {
     back() {
       this.$router.push("/");
+    },
+    logout(){
+      this.$store.commit('setUser',null);
     },
     getUser(){
       let user = {};
@@ -69,12 +88,12 @@ export default {
     }
   },
   mounted() {
-    this.getUser();
+    //this.getUser();
   },
   watch: {
     $route(to, from) {
-      // console.log("from ", from); //从哪来
-      // console.log("to ", to); //到哪去
+      console.log("from ", from); //从哪来
+      console.log("to ", to); //到哪去
       if ("true" == to.query.rgs) {
         console.log("to.query.rgs ", to.query.rgs);
         let user = {};
@@ -126,5 +145,19 @@ export default {
   .islink {
     width: 10%;
   }
+}
+
+.currentUser {
+    background-color: #fff;
+    height: 15vh;
+    img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.2rem;
+  }
+}
+.collections {
+    background: #fff;
+    height: 6vh;
 }
 </style>

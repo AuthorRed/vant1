@@ -5,13 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // count: 5,
-    // websocket:null,
+    count: 5,
+    user:null,
+    forwardUrl:null,
   },
   mutations: {
-/*     setWebsocket (state,websocket) {
-      state.websocket=websocket;
-    } */
+    setUser (state,user) {
+      state.user=user;
+    },
+    setForwardUrl (state,url) {
+      state.forwardUrl=url;
+    },
   },
   actions :{
     /* initWebsocket(context) {
@@ -19,5 +23,8 @@ export default new Vuex.Store({
       let websocket = new WebSocket(wsuri);
       context.commit('setWebsocket',websocket);
     } */
+  },
+  getters :{
+    
   }
 })

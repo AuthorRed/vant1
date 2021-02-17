@@ -14,6 +14,13 @@
         placeholder="商品标题"
         :rules="[{ required: true, message: '请填写商品标题' }]"
       />
+      <van-field
+        v-model="category"
+        name="category"
+        label="类别"
+        placeholder="商品类别"
+        :rules="[{ required: true, message: '请填写商品类别' }]"
+      />
       <van-field v-model="price" name="price" label="单价" placeholder="单价" />
       <van-field
         v-model="seller"
@@ -42,6 +49,7 @@ export default {
       title: "",
       price: "",
       seller: "",
+      category:"",
       user: {},
       uploader: [],
       commodityId:0,
@@ -99,6 +107,7 @@ export default {
       fd.title = this.title;
       fd.price = this.price;
       fd.seller = this.seller;
+      fd.category = this.category;
       console.log("fd", fd);
       postRequest("/commodity/addCommodity", fd).then((res) => {
         console.log("res.data", res.data);

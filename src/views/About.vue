@@ -64,7 +64,6 @@ export default {
     border-radius: 50%;
     animation: Rotate .6s linear infinite;
   }
-
 }
 
 

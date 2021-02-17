@@ -66,13 +66,18 @@ export default {
       );
     }, */
     toCustomerService() {
+      console.log("this.seller:", this.commodity.seller);
+      // this.$router.push({
+      //     // path:"/messageList",
+      //     name:'MessageList',
+      //     params:{
+      //       seller:this.commodity.seller,
+      //       fromCommodityDisplay:true,
+      //     }
+      //   }
       this.$router.push({
-          name:"MessageItem",
-          params:{
-            seller:this.commodity.seller
-          }
-        }
-      );
+        path:'/messageList?fromCommodityDisplay=true&seller='+this.commodity.seller,
+      });
     },
     toSellerShop() {
       console.log("toSellerShop");

@@ -55,8 +55,8 @@ li {
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    /* width: 5px;
+    height: 5px; */
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -71,7 +71,7 @@ li {
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    width: 5px;
+    width: 0px;
     background-color: rgba(125, 125, 125, 0.7);
     -webkit-border-radius: 6px;
 }

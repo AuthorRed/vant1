@@ -49,8 +49,14 @@ export default {
         if(200==res.data.code){
           let user = res.data.extenal.user;
           sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user)); 
+          this.$store.commit('setUser',user)
           Toast.success("登录成功！");
-          this.$router.push('/me?rgs=true');
+          let successForwordUrl = '/me?rgs=true'
+          if(this.$store.state.forwardUrl){
+            successForwordUrl = this.$store.state.forwardUrl;
+          }
+          this.$router.push(successForwordUrl);
+          this.$store.commit('setForwardUrl',null)
         }else{
           Toast.fail(res.data.msg);
         }

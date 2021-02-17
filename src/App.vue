@@ -12,13 +12,20 @@
           $route.path == '/messageList'
         "
       >
-        <div class="down-tab">
+        <!-- <div class="down-tab">
           <router-link to="/" tag="a">home</router-link>
           <router-link to="/about" tag="a">about</router-link>
           <router-link to="/messageList" tag="a">消息</router-link>
           <router-link to="/me" tag="a">我</router-link>
-          <!-- <router-link to="/commodity" tag="a">商品</router-link> -->
-        </div>
+        </div> -->
+
+        <van-tabbar v-model="active">
+          <van-tabbar-item name='home' icon="home-o" to="/">home</van-tabbar-item>
+          <van-tabbar-item name='about'  icon="search" to="/about">about</van-tabbar-item>
+          <van-tabbar-item name='shop'  icon="shop-o" to="/shop">店铺</van-tabbar-item>
+          <van-tabbar-item name='message'  icon="friends-o" to="/messageList">消息</van-tabbar-item>
+          <van-tabbar-item name='me' icon="setting-o" to="/me">我</van-tabbar-item>
+        </van-tabbar>
       </div>
     </div>
   </div>
@@ -29,12 +36,27 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import { mapState } from "vuex";
 export default {
   name: "app",
+  data(){
+    return {
+      active: 'home',
+    }
+  },
   components: {
     HelloWorld,
   },
   methods: {
+    readSessionUser2Store(){
+      if(!this.$store.state.user){
+        let user = sessionStorage.getItem("user"); 
+        if (user) {
+          let userObject = JSON.parse(user);
+          this.$store.commit('setUser',userObject);
+        }
+      }
+    },
   },
   mounted() {
+    this.readSessionUser2Store();
   },
 };
 </script>

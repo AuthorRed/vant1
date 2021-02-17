@@ -192,26 +192,4 @@ export default {
     font-size: .9rem;
   }
 }
-
-::-webkit-scrollbar {
-    // width: 5px;
-    // height: 5px;
-}
- 
-::-webkit-scrollbar-track-piece {
-    background-color: rgba(0, 0, 0, 0.2);
-    -webkit-border-radius: 6px;
-}
- 
-::-webkit-scrollbar-thumb:vertical {
-    height: 5px;
-    background-color: rgba(125, 125, 125, 0.7);
-    -webkit-border-radius: 6px;
-}
- 
-::-webkit-scrollbar-thumb:horizontal {
-    width: 0;
-    // background-color: rgba(125, 125, 125, 0.7);
-    -webkit-border-radius: 0;
-}
 </style>
