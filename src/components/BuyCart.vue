@@ -1,12 +1,39 @@
 <template>
-  <div class="buyCart">
-    <div class="left" @click="showCartPopup">预估另需配送费￥8.51</div>
-    <div class="right">20元起送</div>
+<div>
+  <div  v-if="showCartIcon" class="buyCart">
 
+    <div class="barItem"  @click="toCustomerService">
+      <van-icon name="chat-o"  size="1.5rem" color="#fff" />
+      <span>客服</span>
+    </div>
+    <div class="barItem"  @click="showCartPopup">
+      <van-icon name="cart-o"  size="1.5rem" color="#fff" />
+      <span>购物车</span>
+    </div>
+
+    <div class="barItem"  @click="showCartPopup">
+      <van-icon name="cash-back-record" size="1.5rem" color="#fff"  />
+      <span>立即下单</span>
+    </div>
+
+  </div>
     <div v-if="show" @click="showCartPopup" class="cartPopup">
       <div class="cartContainer" @click.stop="cleanBuyCart">
         <div class="list">
           <van-card
+            v-for="item in cartList"
+            :key="item.id"
+            num="2"
+            price="2.00"
+            desc="描述信息"
+            title="商品标题"
+            thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
+          >
+            <template #footer>
+              <van-stepper v-model="value" min="0" max="100" />
+            </template>
+          </van-card>
+          <!-- <van-card
             num="2"
             price="2.00"
             desc="描述信息"
@@ -16,24 +43,41 @@
             <template #footer>
               <van-stepper v-model="value"  min="0" max="100"/>
             </template>
-          </van-card>
+          </van-card> -->
         </div>
       </div>
     </div>
-  </div>
+
+</div>
 </template>
 
 <script>
+import { Toast } from "vant";
 export default {
+  props: {
+    seller:String,
+    cartList: Array,
+    showCartIcon:Boolean,
+  },
   data() {
     return {
       active: 2,
       show: false,
-      value:0,
-      
+      value: 0,
     };
   },
   methods: {
+    toCustomerService() {
+      if(this.seller == this.$store.state.user.uid){
+        Toast.fail('商家不能于自己发起会话!')
+      }
+      this.$router.push({
+        path:'/messageList?fromCommodityDisplay=true&seller='+this.seller,
+      });
+    },
+    addItem(item) {
+      console.log("add item", item);
+    },
     cleanBuyCart() {
       console.log("clean buy cart..");
     },
@@ -52,29 +96,31 @@ export default {
 <style lang="less" scoped>
 .buyCart {
   position: fixed;
-  bottom: 0.5rem;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
   display: flex;
-  justify-content: center;
-  height: 2rem;
-  border-radius: 1rem;
+  justify-content: space-around;
+  height: 3rem;
+  //border-radius: 1rem;
 
-  .left {
+
+  .barItem {
     color: #fff;
-    width: 70%;
-    line-height: 2rem;
-  }
-  .right {
-    color: darkblue;
-    width: 30%;
-    background-color: gold;
+    // width: 30%;
+    //background-color: gold;
     text-align: center;
-    line-height: 2rem;
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
+    //line-height: 2rem;
+    display: flex;
+    flex-direction: column;
+    span {
+      font-size: 0.8rem;
+      line-height: 2;
+      color: #fff;
+    }
   }
 
+}
   .cartPopup {
     position: fixed;
     top: 0;
@@ -97,9 +143,7 @@ export default {
       text-align: start;
     }
     .van-card__price {
-      color:red;
+      color: red;
     }
-
   }
-}
 </style>

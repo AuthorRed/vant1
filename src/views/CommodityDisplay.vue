@@ -20,12 +20,15 @@
       <h2>{{ commodity.title }}</h2>
       <h3>￥:{{ commodity.price }}</h3>
       <h2>{{ commodity.seller }}</h2>
+    
+      <buy-cart ref="buyCart" :seller="commodity.seller" :showCartIcon="showCartIcon"></buy-cart>
       <van-goods-action>
         <van-goods-action-icon
           icon="chat-o"
           text="客服"
           @click="toCustomerService"
         />
+        <van-goods-action-icon icon="cart-o" text="购物车" @click="showCartPopup" />
         <van-goods-action-icon
           icon="shop-o"
           text="店铺"
@@ -41,10 +44,12 @@
     <transition name="slide">
       <router-view></router-view>
     </transition>
+    <!-- <buy-cart></buy-cart> -->
   </div>
 </template>
 <script>
 import { getRequest, postRequest, postFile } from "@/api/http.js";
+import BuyCart from "@/components/BuyCart.vue";
 import { Toast } from "vant";
 export default {
   data() {
@@ -53,11 +58,18 @@ export default {
       imgList: [],
       commodityId: 0,
       commodity: {},
+      showCartIcon:false,
     };
   },
   name: "CommodityDisplay",
-
+  components: {
+    "buy-cart": BuyCart,
+  },
   methods: {
+    showCartPopup(){
+      this.$refs.buyCart.showCartPopup();
+      console.log("showCartPopup:",this.$refs.buyCart);
+    },
     /* toCustomerService() {
       this.$router.push(
         "/me/commodityList/commodityDisplay/" +
@@ -67,14 +79,9 @@ export default {
     }, */
     toCustomerService() {
       console.log("this.seller:", this.commodity.seller);
-      // this.$router.push({
-      //     // path:"/messageList",
-      //     name:'MessageList',
-      //     params:{
-      //       seller:this.commodity.seller,
-      //       fromCommodityDisplay:true,
-      //     }
-      //   }
+      if(this.commodity.seller == this.$store.state.user.uid){
+        Toast.fail('商家不能于自己发起会话!')
+      }
       this.$router.push({
         path:'/messageList?fromCommodityDisplay=true&seller='+this.commodity.seller,
       });

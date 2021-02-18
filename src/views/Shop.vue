@@ -55,11 +55,7 @@
                 desc="描述信息"
                 :title="item.commodity.title"
                 :thumb=" 'http://localhost:8080/file/getFileById?id=' + item.attach.id"
-              >
-                <template #footer>
-                  <van-stepper v-model="amount" min="0" max="100" />
-                </template>
-              </van-card>
+              ></van-card>
 
               <!-- <div class="itemBox">
                 <img
@@ -83,7 +79,7 @@
     <transition name="slide">
       <router-view></router-view>
     </transition>
-    <buy-cart></buy-cart>
+    <buy-cart ref="buyCart" :seller="seller" :showCartIcon="showCartIcon"></buy-cart>
     <!-- <div class="buyCart">
       <div class="left" @click="showPopup">预估另需配送费￥8.5</div>
       <div class="right">20元起送</div>
@@ -113,6 +109,7 @@ export default {
 
       show: false,
       amount: 0,
+      showCartIcon:true,
     };
   },
   name: "CommodityList",
