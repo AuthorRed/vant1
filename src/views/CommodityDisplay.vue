@@ -2,7 +2,7 @@
   <div class="container">
     <div v-if="$route.path.indexOf('/messageItem') < 0" class="content">
       <van-nav-bar
-        title="添加商品"
+        title="商品"
         left-text="返回"
         left-arrow
         @click-left="back()"
@@ -21,7 +21,7 @@
       <h3>￥:{{ commodity.price }}</h3>
       <h2>{{ commodity.seller }}</h2>
     
-      <buy-cart ref="buyCart" :seller="commodity.seller" :showCartIcon="showCartIcon"></buy-cart>
+      <buy-cart ref="buyCart" :seller="commodity.seller" :showCartIcon="showCartIcon" ></buy-cart>
       <van-goods-action>
         <van-goods-action-icon
           icon="chat-o"
@@ -34,11 +34,14 @@
           text="店铺"
           @click="toSellerShop"
         />
+        <!-- <van-goods-action-button type="warning" text="加入购物车" />
         <van-goods-action-button
           type="danger"
           text="立即购买"
           @click="toPlaceOrder"
-        />
+        /> -->
+        <van-goods-action-button type="warning" text="加入购物车"  @click="add2buyCart"/>
+        <van-goods-action-button type="danger" text="立即购买" @click="toPlaceOrder"/>
       </van-goods-action>
     </div>
     <transition name="slide">
@@ -66,9 +69,12 @@ export default {
     "buy-cart": BuyCart,
   },
   methods: {
+    add2buyCart(){
+      this.$refs.buyCart.addItem(this.commodity);
+    },
     showCartPopup(){
       this.$refs.buyCart.showCartPopup();
-      console.log("showCartPopup:",this.$refs.buyCart);
+      // console.log("showCartPopup:",this.$refs.buyCart);
     },
     /* toCustomerService() {
       this.$router.push(

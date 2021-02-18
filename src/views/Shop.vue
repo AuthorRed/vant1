@@ -233,6 +233,7 @@ export default {
 
     .logo {
       display: flex;
+      background-color: #fff;
       .right {
         margin-top: 0.3rem;
       }

@@ -8,6 +8,7 @@ export default new Vuex.Store({
     count: 5,
     user:null,
     forwardUrl:null,
+    cartList:[],
   },
   mutations: {
     setUser (state,user) {
@@ -16,6 +17,10 @@ export default new Vuex.Store({
     setForwardUrl (state,url) {
       state.forwardUrl=url;
     },
+    setCartList (state,list) {
+      state.cartList = list
+    },
+  
   },
   actions :{
     /* initWebsocket(context) {

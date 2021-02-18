@@ -21,12 +21,12 @@
       <div class="cartContainer" @click.stop="cleanBuyCart">
         <div class="list">
           <van-card
-            v-for="item in cartList"
-            :key="item.id"
-            num="2"
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
+            v-for="(item,index ) in $store.state.cartList"
+            :key="index"
+            :num="item ? item.amount:'0'"
+            :price="item ? item.price:'0.00'"
+            :desc="描述信息"
+            :title="商品标题"
             thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
           >
             <template #footer>
@@ -56,7 +56,6 @@ import { Toast } from "vant";
 export default {
   props: {
     seller:String,
-    cartList: Array,
     showCartIcon:Boolean,
   },
   data() {
@@ -67,6 +66,41 @@ export default {
     };
   },
   methods: {
+    addItem(item){
+      console.log("add item", item);
+      let cartList = this.$store.state.cartList;
+      if(this.checkIfItemExit(cartList,item)){
+        for (let index = 0; index < cartList.length; index++) {
+          const commodity = cartList[index];
+          if(commodity.id == item.id){
+            if(!commodity.amount){
+              commodity.amount=1;
+            }
+            commodity.amount++;
+            this.$store.commit('setCartList',commodity);
+
+            break;
+            console.log('after return..');
+          }
+        }
+      }
+      item.amount = 1;
+      cartList.push(item);
+      this.$store.commit('setCartList',cartList);
+    },
+    checkIfItemExit(array,item){
+      for (let index = 0; index < array.length; index++) {
+        const commodity = array[index];
+        if(!commodity || !commodity.id ){
+          continue;
+        }
+        if(item.id ==commodity.id){
+          return true;
+        }
+        
+      }
+      return false;
+    },
     toCustomerService() {
       if(this.seller == this.$store.state.user.uid){
         Toast.fail('商家不能于自己发起会话!')
@@ -74,9 +108,6 @@ export default {
       this.$router.push({
         path:'/messageList?fromCommodityDisplay=true&seller='+this.seller,
       });
-    },
-    addItem(item) {
-      console.log("add item", item);
     },
     cleanBuyCart() {
       console.log("clean buy cart..");
@@ -87,7 +118,7 @@ export default {
       } else {
         this.show = true;
       }
-      console.log("show or hide popup..");
+      // console.log("show or hide popup..");
     },
   },
 };
@@ -127,7 +158,7 @@ export default {
     left: 0;
     background-color: rgba(0, 0, 0, 0.3);
     width: 100%;
-    height: 93%;
+    height: 91%;
     z-index: 9999;
 
     .cartContainer {
@@ -137,6 +168,8 @@ export default {
       left: 0;
       width: 100%;
       bottom: 0rem;
+      box-sizing: border-box;
+      overflow: scroll;
     }
 
     .van-card__content {
