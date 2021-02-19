@@ -44,17 +44,17 @@
           <div class="list">
             <a
               v-for="item in list"
-              :key="item.commodity.id"
+              :key="item.id"
               class="listItem"
               href="javascript:void(0)"
-              @click="gotoCommodity(item.commodity.id)"
+              @click="gotoCommodity(item.id)"
             >
               <van-card
                 num="1"
-                :price="item.commodity.price"
+                :price="item.price"
                 desc="描述信息"
-                :title="item.commodity.title"
-                :thumb=" 'http://localhost:8080/file/getFileById?id=' + item.attach.id"
+                :title="item.title"
+                :thumb="item.headImg?('http://localhost:8080/file/getFileById?id=' + item.headImg):null "
               ></van-card>
 
               <!-- <div class="itemBox">

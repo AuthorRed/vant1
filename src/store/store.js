@@ -20,7 +20,22 @@ export default new Vuex.Store({
     setCartList (state,list) {
       state.cartList = list
     },
-  
+    setCartListItem (state,data) {
+      console.log('setCartListItem');
+      let index = data.index;
+      let item = data.item;
+      if(!index){
+        index = 0;
+      }
+      if(item){
+        state.cartList.splice(index,1,item);
+      }else{
+        state.cartList.splice(index,1);
+      }
+    },
+    cartListAddItem (state,item){
+      state.cartList.push(item);
+    },
   },
   actions :{
     /* initWebsocket(context) {
