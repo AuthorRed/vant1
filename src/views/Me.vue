@@ -22,19 +22,21 @@
       <router-link to="/me/loginForm" tag="a">
       <van-divider />
         <van-cell title="登录" is-link />
-        <van-divider />
       </router-link>
       <router-link to="/me/registerForm" tag="a">
         <van-cell title="注册" is-link />
-        <van-divider />
       </router-link>
       <router-link to="/me/goodsList" tag="a">
         <van-cell title="goodsList" is-link />
-        <van-divider />
       </router-link>
       <router-link to="/me/commodityList" tag="a">
         <van-cell title="商品服务列表" is-link />
-        <van-divider />
+      </router-link>
+      <router-link to="/me/placeOrder" tag="a">
+        <van-cell title="下单" is-link />
+      </router-link>
+      <router-link to="/me/OrderList" tag="a">
+        <van-cell title="订单" is-link />
       </router-link>
     </div>
     <transition name="slide">

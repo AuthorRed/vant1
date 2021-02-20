@@ -10,7 +10,7 @@
         <span>购物车</span>
       </div>
 
-      <div class="barItem" @click="showCartPopup">
+      <div class="barItem" @click="toPlaceOrder">
         <van-icon name="cash-back-record" size="1.5rem" color="#fff" />
         <span>立即下单</span>
       </div>
@@ -46,17 +46,6 @@
               />
             </template>
           </van-card>
-          <!-- <van-card
-            num="2"
-            price="2.00"
-            desc="描述信息"
-            title="商品标题"
-            thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
-          >
-            <template #footer>
-              <van-stepper v-model="value"  min="0" max="100"/>
-            </template>
-          </van-card> -->
         </div>
         <div class="totalPrice">
           总计：<span>{{ itemsAccumulatedPrice }}</span>
@@ -114,6 +103,9 @@ export default {
     },
   },
   methods: {
+    toPlaceOrder(){
+      this.$router.push('/me/placeOrder');
+    },
     stopEeventPopup() {
       console.log("stopEeventPopup");
     },

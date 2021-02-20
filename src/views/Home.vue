@@ -1,12 +1,12 @@
 <template>
-  <div class="home">
-
-    <HelloWorld msg="欢迎来到服务问答网！"/>
-    <van-search v-model="searchValue" disabled  @click="toSearch" placeholder="请输入搜索关键词" />
+  <div class="container">
+    <div v-if="$route.path=='/home'" class="home">
+      <HelloWorld msg="欢迎来到服务问答网！"/>
+      <van-search v-model="searchValue" disabled  @click="toSearch" placeholder="请输入搜索关键词" />
+    </div>
     <transition name="slide">
       <router-view></router-view>
     </transition>
-
   </div>
 </template>
 

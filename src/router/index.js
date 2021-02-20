@@ -18,8 +18,7 @@ const routes = [
         path: '/searchList',
         name: 'SearchList',
         component: () => import('../views/SearchList.vue')
-      },
-
+      }
     ]
   },
   {
@@ -49,6 +48,16 @@ const routes = [
     name: 'Me',
     component: () => import('../views/Me.vue'),
     children:  [
+      {
+        path: 'orderList',
+        name: 'OrderList',
+        component: () => import('../views/OrderList.vue')
+      }, 
+      {
+        path: 'placeOrder',
+        name: 'PlaceOrder',
+        component: () => import('../views/PlaceOrder.vue')
+      }, 
       {
         path: 'cellContent',
         name: 'CellContent',

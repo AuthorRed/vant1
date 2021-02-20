@@ -97,6 +97,7 @@ export default {
     },
     toPlaceOrder() {
       console.log("toPlaceOrder");
+      this.$router.push('/me/placeOrder');
     },
     getUser() {
       let user = {};

@@ -19,6 +19,20 @@
         placeholder="昵称"
       />
       <van-field
+        v-model="role"
+        name="role"
+        label="角色"
+      >
+        <template #input>
+          <van-radio-group v-model="role" direction="horizontal">
+            <van-radio name="BUYER">买家</van-radio>
+            <van-radio name="SELLER">卖家</van-radio>
+          </van-radio-group>
+        </template>
+      
+      </van-field>
+
+      <van-field
         v-model="pwd"
         type="password"
         name="pwd"
@@ -41,6 +55,7 @@ export default {
       uid: "",
       pwd: "",
       nickName: "",
+      role: "",
     };
   },
   name: "RegisterForm",
@@ -51,6 +66,7 @@ export default {
       var fd = new FormData();
       fd.uid = this.uid;
       fd.pwd = this.pwd;
+      fd.nickName = this.nickName;
       fd.nickName = this.nickName;
       console.log("fd", fd);
       postRequest("/user/register", fd).then((res) => {

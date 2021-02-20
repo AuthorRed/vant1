@@ -38,20 +38,6 @@
               :title="item.title"
               :thumb="item.img_id?('http://localhost:8080/file/getFileById?id=' + item.img_id):null "
             ></van-card>
-
-            <!-- <div class="itemBox">
-              <img v-if="item.img_id"
-                :src="
-                    'http://localhost:8080/file/getFileById?id=' +
-                   item.img_id
-                  "
-              />
-              <div class="itemWord">
-                <h2>{{ item.title }}</h2>
-                <h3>{{ item.price }}</h3>
-                <p>{{ item.seller }}</p>
-              </div>
-            </div> -->
           </a>
         </div>
       
@@ -77,10 +63,10 @@ export default {
       status: 1,
     };
   },
-  name: "SearchList",
+  name: "OrderList",
   methods: {
     back() {
-      this.$router.push("/");
+      this.$router.go(-1);
     },
     onSearch() {
       Toast("onSearch");

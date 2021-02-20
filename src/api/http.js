@@ -53,7 +53,21 @@ export function getRequest(url, data = {}) {
 export function postRequest(url, data = {}) {
     return new Promise((resolve, reject) => {
         http
-            .post(url, QS.stringify(data), { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+            .post(url, QS.stringify(data), { headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' } })
+            .then(response => {
+                resolve(response);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
+
+}
+//封装post请求
+export function postJson(url, data = {}) {
+    return new Promise((resolve, reject) => {
+        http
+            .post(url, data, { headers: { 'Content-Type': 'application/json;charset=utf-8' } })
             .then(response => {
                 resolve(response);
             })
@@ -67,7 +81,7 @@ export function postRequest(url, data = {}) {
 export function postFile(url, data = {}) {
     return new Promise((resolve, reject) => {
         http
-            .post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .post(url, data, { headers: { 'Content-Type': 'multipart/form-data;charset=utf-8' } })
             .then(response => {
                 resolve(response);
             })

@@ -17,22 +17,22 @@
         @load="getList"
       >
         <div class="list">
-          <a  v-for="(item) in list" :key="item.commodity.id" 
+          <a  v-for="(item) in list" :key="item.id" 
             class="listItem"
             href="javascript:void(0)"
-            @click="gotoCommodity(item.commodity.id)"
+            @click="gotoCommodity(item.id)"
           >
             <div class="itemBox">
-              <img v-if="item.attach"
+              <img v-if="item.headImg"
                 :src="
                     'http://localhost:8080/file/getFileById?id=' +
-                   item.attach.id
+                   item.headImg
                   "
               />
               <div class="itemWord">
-                <h2>{{ item.commodity.title }}</h2>
-                <h3>{{ item.commodity.price }}</h3>
-                <p>{{ item.commodity.seller }}</p>
+                <h2>{{ item.title }}</h2>
+                <h3>{{ item.price }}</h3>
+                <p>{{ item.seller }}</p>
               </div>
             </div>
           </a>
