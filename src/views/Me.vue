@@ -35,8 +35,11 @@
       <router-link to="/me/placeOrder" tag="a">
         <van-cell title="下单" is-link />
       </router-link>
-      <router-link to="/me/OrderList" tag="a">
+      <router-link to="/me/orderList" tag="a">
         <van-cell title="订单" is-link />
+      </router-link>
+      <router-link to="/shop" tag="a">
+        <van-cell title="我的店铺" is-link />
       </router-link>
     </div>
     <transition name="slide">

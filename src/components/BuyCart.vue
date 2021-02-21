@@ -204,6 +204,7 @@ export default {
     },
     cleanBuyCart() {
       console.log("clean buy cart..");
+      this.$store.commit('setCartList',[]);
     },
     showCartPopup() {
       if (this.show) {

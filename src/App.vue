@@ -22,9 +22,8 @@
         <van-tabbar v-model="active">
           <van-tabbar-item name='home' icon="home-o" to="/">home</van-tabbar-item>
           <van-tabbar-item name='about'  icon="search" to="/about">about</van-tabbar-item>
-          <van-tabbar-item name='shop'  icon="shop-o" to="/shop">店铺</van-tabbar-item>
-          <van-tabbar-item name='message'  icon="friends-o" to="/messageList">消息</van-tabbar-item>
-          <van-tabbar-item name='me' icon="setting-o" to="/me">我</van-tabbar-item>
+          <van-tabbar-item name='message'  icon="chat-o" to="/messageList">消息</van-tabbar-item>
+          <van-tabbar-item name='me' icon="user-o" to="/me">我</van-tabbar-item>
         </van-tabbar>
       </div>
     </div>

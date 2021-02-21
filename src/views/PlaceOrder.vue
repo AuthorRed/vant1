@@ -111,6 +111,7 @@ export default {
       postJson("/order/save", order).then((res) => {
         console.log("res.data", res.data);
         if (200 == res.data.code) {
+          this.$store.commit('setCartList',[]);
           Toast.success("下单成功！");
         } else {
           Toast.fail(res.data.msg);

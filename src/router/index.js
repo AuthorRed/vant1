@@ -27,11 +27,6 @@ const routes = [
     component: () => import( '../views/About.vue')
   },
   {
-    path: '/shop',
-    name: 'Shop',
-    component: () => import( '../views/Shop.vue')
-  },
-  {
     path: '/messageList',
     name: 'MessageList',
     component: () => import( '../views/MessageList.vue'),
@@ -48,6 +43,11 @@ const routes = [
     name: 'Me',
     component: () => import('../views/Me.vue'),
     children:  [
+      {
+        path: '/shop',
+        name: 'Shop',
+        component: () => import( '../views/Shop.vue')
+      },
       {
         path: 'orderList',
         name: 'OrderList',

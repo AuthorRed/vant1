@@ -1,23 +1,21 @@
 <template>
   <div class="container">
     <div class="header">
-      <form action="/">
-        <van-search
-          ref="searchInput"
-          v-model="keyWord"
-          show-action
-          placeholder="请输入搜索关键词"
-          @search="onSearch"
-          @cancel="back"
-        >
-          <template #left>
-            <div @click="back"><van-icon name="arrow-left" /></div>
-          </template>
-        </van-search>
-      </form>
+      <van-nav-bar title="订单" left-text="返回" left-arrow @click-left="back()"/>
+      <van-tabs @click="chooseOrderType">
+        <van-tab name="buyer" title="我发出的订单"></van-tab>
+        <van-tab name="seller" title="我收到的订单"></van-tab>
+      </van-tabs>
+      <van-tabs @click="chooseOrderStatus" sticky>
+        <van-tab name="all" title="全部"></van-tab>
+        <van-tab name="10" title="待确认"></van-tab>
+        <van-tab name="20" title="待付款"></van-tab>
+        <van-tab name="30" title="待收货"></van-tab>
+        <van-tab name="40" title="已完成"></van-tab>
+      </van-tabs>
     </div>
 
-    <div v-if="$route.path == '/searchList'" class="content">
+    <div v-if="$route.path == '/me/orderList'" class="content">
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
         v-model="loading"
@@ -48,7 +46,6 @@
 </template>
 <script>
 import { getRequest } from "@/api/http.js";
-import { Toast } from "vant";
 export default {
   data() {
     return {
@@ -58,19 +55,36 @@ export default {
       loading: false,
       finished: false,
       page: 1,
-      rows: 8,
+      rows: 5,
       refreshing: false,
       status: 1,
+      orderType:'buyer',
     };
   },
   name: "OrderList",
   methods: {
+    chooseOrderStatus(name, title){
+      console.log(name);
+      if(this.status==name){
+        return;
+      }else{
+        this.status =name;  
+        this.list = [];
+        this.getList();
+      }
+    },
+    chooseOrderType(name, title){
+      console.log(name);
+      if(this.orderType==name){
+        return;
+      }else{
+        this.orderType =name;  
+        this.list = [];
+        this.getList();
+      }
+    },
     back() {
       this.$router.go(-1);
-    },
-    onSearch() {
-      Toast("onSearch");
-      this.getList();
     },
     gotoCommodity(id) {
       this.$router.push("/me/commodityList/commodityDisplay/" + id);
@@ -105,30 +119,22 @@ export default {
       this.getList();
     },
     getList() {
-      if(!this.keyWord ){
-        this.loading = false;
-        // this.finished = true;
-        this.refreshing = false;
-        console.log('keyWord == null');
-        return;
-      }
-      // 将 loading 设置为 true，表示处于加载状态
-      // this.loading = true;
-      // this.list = [];
-      getRequest("/search/index?keyWord="+this.keyWord, {
+      let params={};
+      params.token = this.$store.state.user.token;
+      params.orderType = this.orderType;
+      params.page = this.page;
+      params.rows = this.rows;
+      getRequest("/order/list?",params, {
         page: this.page,
         rows: this.rows,
-        // status: this.status,
-        // seller: this.user.uid,
       }).then((res) => {
-        console.log('commodity/list:',res.data);
+        console.log('order/list:',res.data);
         let payload = res.data;
         if (200 == payload.code && payload.extenal.list) {
           if (payload.extenal.list.length < 1 || payload.extenal.list.length <this.rows) {
             this.finished = true;
           } else {
             this.page++;
-            // this.list = this.list.concat(payload.extenal.list);
           }
           for (let i = 0; i < payload.extenal.list.length; i++) {
             this.list.push(payload.extenal.list[i]);
@@ -149,11 +155,7 @@ export default {
     },
   },
   mounted() {
-    //this.getUser();
-    //this.getList();
-    console.log("mounted-SearchList");
-    console.log(this);
-    this.$refs.searchInput.focus();
+    
   },
   watch:{
     keyWord: function (a, b) {

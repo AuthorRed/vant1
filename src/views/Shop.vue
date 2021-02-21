@@ -227,8 +227,9 @@ export default {
   z-index: 99;
 
   .header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    z-index: 200;
 
 
     .logo {
@@ -256,26 +257,13 @@ export default {
         margin: 0.3rem;
       }
     }
-    /* .categoryWarper {
-      position: absolute;
-      bottom: -2vh;
-      .category {
-        width: 80%;
-        box-sizing: border-box;
-        overflow: scroll;
-        height: 5vh;
-        background-color: rgb(243, 243, 243);
-        white-space: nowrap;
-        .item {
-          padding-right: 1.3rem;
-        }
-      }
-    } */
+
   }
   .content {
     width: 100%;
     position: absolute;
-      
+    top: 10rem;
+
     .list {
       .listItem {
         display: flex;
@@ -328,33 +316,6 @@ export default {
     }
   }
 
-  // .buyCart {
-  //   position: fixed;
-  //   bottom: 0.5rem;
-  //   background-color: rgba(0, 0, 0, 0.7);
-  //   width: 100%;
-  //   display: flex;
-  //   justify-content: center;
-  //   height: 2rem;
-  //   border-radius: 1rem;
 
-  //   .left {
-  //     color: #fff;
-  //     width: 70%;
-  //   }
-  //   .right {
-  //     color: darkblue;
-  //     width: 30%;
-  //     background-color: gold;
-  //     text-align: center;
-  //     line-height: 2rem;
-  //     border-top-right-radius: 1rem;
-  //     border-bottom-right-radius: 1rem;
-  //   }
-
-  //   .van-overlay {
-  //     height: 80%;
-  //   }
-  // }
 }
 </style>
