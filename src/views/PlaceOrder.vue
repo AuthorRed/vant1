@@ -33,6 +33,10 @@
           小计&nbsp;￥&nbsp;<span>{{ itemsAccumulatedPrice }}</span>
         </div>
       </div>
+      <div class="block">
+        <input type="text" v-model="remark">
+      </div>
+
     </div>
     <div class="submitOrder">
       <div class="innerBox">
@@ -50,6 +54,7 @@ export default {
     return {
       uid: "",
       pwd: "",
+      remark:"",
     };
   },
   name: "PlaceOrder",
@@ -104,7 +109,7 @@ export default {
       order.token = user.token;
       order.sellerUid = list[0].seller
       order.buyerUid = user.uid;
-      order.remark = user.uid;
+      order.remark = this.remark;
       order.buyerPay = this.itemsAccumulatedPrice;
 
       console.log("order", order);

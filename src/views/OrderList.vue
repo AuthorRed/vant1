@@ -7,7 +7,7 @@
         <van-tab name="seller" title="我收到的订单"></van-tab>
       </van-tabs>
       <van-tabs @click="chooseOrderStatus" sticky>
-        <van-tab name="all" title="全部"></van-tab>
+        <van-tab name="100" title="全部"></van-tab>
         <van-tab name="10" title="待确认"></van-tab>
         <van-tab name="20" title="待付款"></van-tab>
         <van-tab name="30" title="待收货"></van-tab>
@@ -29,13 +29,21 @@
             href="javascript:void(0)"
             @click="gotoCommodity(item.id)"
           >
-            <van-card
-              num="1"
-              :price="item.price"
-              desc="描述信息"
-              :title="item.title"
+          <div class="block">
+            <h2><span>订单号：</span> {{item.id}}</h2>
+            <h2><span>卖家：</span> {{item.sellerUid}}</h2>
+            <h2><span>买家：</span> {{item.buyerUid}}</h2>
+            <h2><span>状态：</span> {{item.status}}</h2>
+            <h2><span>数量：</span> {{item.amount}}</h2>
+            <h2><span>备注：</span> {{item.remark}}</h2>
+          </div>
+            <!-- <van-card
+              :num="item.sellerUid"
+              :price="item.status"
+              desc="订单信息"
+              :title="item.buyerUid"
               :thumb="item.img_id?('http://localhost:8080/file/getFileById?id=' + item.img_id):null "
-            ></van-card>
+            ></van-card> -->
           </a>
         </div>
       
@@ -57,7 +65,7 @@ export default {
       page: 1,
       rows: 5,
       refreshing: false,
-      status: 1,
+      status: null,
       orderType:'buyer',
     };
   },
@@ -65,10 +73,12 @@ export default {
   methods: {
     chooseOrderStatus(name, title){
       console.log(name);
+      
       if(this.status==name){
         return;
       }else{
         this.status =name;  
+        this.page =1;
         this.list = [];
         this.getList();
       }
@@ -79,6 +89,7 @@ export default {
         return;
       }else{
         this.orderType =name;  
+        this.page =1;
         this.list = [];
         this.getList();
       }
@@ -104,19 +115,16 @@ export default {
     },
 
     onRefresh() {
-      if(!this.keyWord ||this.finished){
-        this.loading = false;
-        this.finished = true;
-        this.refreshing = false;
-        console.log('keyWord == null');
-        return;
-      }
       // 清空列表数据
-      this.list = [];
+      let array = this.list;
+      for (let i = 0;i<array.length;i++) {
+        console.log(array.pop());  
+      }
+
       this.finished = false;
       this.page = 1;
       // 重新加载数据
-      this.getList();
+      // this.getList();
     },
     getList() {
       let params={};
@@ -124,10 +132,8 @@ export default {
       params.orderType = this.orderType;
       params.page = this.page;
       params.rows = this.rows;
-      getRequest("/order/list?",params, {
-        page: this.page,
-        rows: this.rows,
-      }).then((res) => {
+      params.status = this.status ==100?null:this.status;
+      getRequest("/order/list?",params).then((res) => {
         console.log('order/list:',res.data);
         let payload = res.data;
         if (200 == payload.code && payload.extenal.list) {
@@ -157,12 +163,6 @@ export default {
   mounted() {
     
   },
-  watch:{
-    keyWord: function (a, b) {
-      this.page = 1;
-      this.list = [];
-    }
-  }
 };
 </script>
 <style lang="less" scoped>
@@ -181,7 +181,7 @@ export default {
   }
   .content {
     position: absolute;
-    top: 54px;
+    top: 138px;
     width: 100%;
 
     .van-card {
@@ -196,6 +196,12 @@ export default {
   }
 }
 
+  .block {
+    background-color: #fff;
+    width: 100%;
+    margin: 5px;
+    text-align: left;
+  }
  .list {
   .listItem {
     display:flex;

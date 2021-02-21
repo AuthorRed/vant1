@@ -96,23 +96,23 @@ export default {
     //this.getUser();
   },
   watch: {
-    $route(to, from) {
-      console.log("from ", from); //从哪来
-      console.log("to ", to); //到哪去
-      if ("true" == to.query.rgs) {
-        console.log("to.query.rgs ", to.query.rgs);
-        let user = {};
-        let item = sessionStorage.getItem("user");
-        try {
-          user = JSON.parse(item);
-        } catch (error) {
-          console.log("error ", error);
-        }
-        if (user) {
-          this.user = user;
-        }
-      }
-    },
+    // $route(to, from) {
+    //   console.log("from ", from); //从哪来
+    //   console.log("to ", to); //到哪去
+    //   if ("true" == to.query.rgs) {
+    //     console.log("to.query.rgs ", to.query.rgs);
+    //     let user = {};
+    //     let item = sessionStorage.getItem("user");
+    //     try {
+    //       user = JSON.parse(item);
+    //     } catch (error) {
+    //       console.log("error ", error);
+    //     }
+    //     if (user) {
+    //       this.user = user;
+    //     }
+    //   }
+    // },
   },
 };
 </script>
