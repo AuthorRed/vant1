@@ -12,6 +12,7 @@
         <van-tab name="20" title="待付款"></van-tab>
         <van-tab name="30" title="待收货"></van-tab>
         <van-tab name="40" title="已完成"></van-tab>
+        <van-tab name="60" title="问题单"></van-tab>
       </van-tabs>
     </div>
 
@@ -35,6 +36,7 @@
             <h2><span>买家：</span> {{item.buyerUid}}</h2>
             <h2><span>状态：</span> {{item.status}}</h2>
             <h2><span>数量：</span> {{item.amount}}</h2>
+            <h2><span>金额：</span> {{item.buyerPay}}</h2>
             <h2><span>备注：</span> {{item.remark}}</h2>
           </div>
             <!-- <van-card
@@ -116,10 +118,11 @@ export default {
 
     onRefresh() {
       // 清空列表数据
-      let array = this.list;
-      for (let i = 0;i<array.length;i++) {
-        console.log(array.pop());  
-      }
+      // let array = this.list;
+      // for (let i = 0;i<array.length;i++) {
+      //   console.log(array.pop());  
+      // }
+      this.list =[];
 
       this.finished = false;
       this.page = 1;

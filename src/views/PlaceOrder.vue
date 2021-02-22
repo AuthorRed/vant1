@@ -218,6 +218,12 @@ export default {
       color: grey;
     }
 
+    input {
+      padding: 1rem;
+      border: 1px solid;
+      width: 80%;
+      border-radius: 1rem;
+    }
     .list {
       //border-bottom: .5px solid rgba(0,0,0,.1);
     }
