@@ -224,9 +224,7 @@ export default {
       width: 80%;
       border-radius: 1rem;
     }
-    .list {
-      //border-bottom: .5px solid rgba(0,0,0,.1);
-    }
+
   }
   .cartLable {
     display: flex;

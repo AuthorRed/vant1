@@ -8,11 +8,13 @@
       </van-tabs>
       <van-tabs @click="chooseOrderStatus" sticky>
         <van-tab name="100" title="全部"></van-tab>
-        <van-tab name="10" title="待确认"></van-tab>
-        <van-tab name="20" title="待付款"></van-tab>
-        <van-tab name="30" title="待收货"></van-tab>
-        <van-tab name="40" title="已完成"></van-tab>
-        <van-tab name="60" title="问题单"></van-tab>
+        <van-tab name="10" title="待接单" :dot="dot10"></van-tab>
+        <van-tab name="20" title="待付款" :dot="dot20" ></van-tab>
+        <van-tab name="30" title="待收款" :dot="dot30" ></van-tab>
+        <van-tab name="40" title="待发货" :dot="dot40" ></van-tab>
+        <van-tab name="50" title="待收货" :dot="dot50" ></van-tab>
+        <van-tab name="60" title="完成" :dot="dot60" ></van-tab>
+        <van-tab name="70" title="问题单" :dot="dot70" ></van-tab>
       </van-tabs>
     </div>
 
@@ -30,22 +32,24 @@
             href="javascript:void(0)"
             @click="gotoCommodity(item.id)"
           >
-          <div class="block">
-            <h2><span>订单号：</span> {{item.id}}</h2>
-            <h2><span>卖家：</span> {{item.sellerUid}}</h2>
-            <h2><span>买家：</span> {{item.buyerUid}}</h2>
-            <h2><span>状态：</span> {{item.status}}</h2>
-            <h2><span>数量：</span> {{item.amount}}</h2>
-            <h2><span>金额：</span> {{item.buyerPay}}</h2>
-            <h2><span>备注：</span> {{item.remark}}</h2>
-          </div>
-            <!-- <van-card
-              :num="item.sellerUid"
-              :price="item.status"
-              desc="订单信息"
-              :title="item.buyerUid"
-              :thumb="item.img_id?('http://localhost:8080/file/getFileById?id=' + item.img_id):null "
-            ></van-card> -->
+          <van-swipe-cell>
+            <div class="block">
+              <h2><span>订单号：</span> {{item.id}}</h2>
+              <h2><span>卖家：</span> {{item.sellerUid}}</h2>
+              <h2><span>买家：</span> {{item.buyerUid}}</h2>
+              <h2><span>状态：</span> {{item.status|formatStatus}}</h2>
+              <h2><span>数量：</span> {{item.amount}}</h2>
+              <h2><span>金额：</span> {{item.buyerPay}}</h2>
+              <h2><span>备注：</span> {{item.remark}}</h2>
+              <h2><span>下单时间：</span> {{item.addTime |formatDate}}</h2>
+              <h2><span>更新时间：</span> {{item.updateTime|formatDate}}</h2>
+            </div>
+            <template #right>
+              <van-button square type="primary" text="确认" @click="orderConfirm(item.id,item.status)"/>
+              <van-button square type="danger" text="拒绝为问题单"  @click="orderReject(item.id,item.status)"/>
+            </template>
+          </van-swipe-cell>
+            
           </a>
         </div>
       
@@ -55,7 +59,8 @@
   </div>
 </template>
 <script>
-import { getRequest } from "@/api/http.js";
+import { getRequest,postRequest } from "@/api/http.js";
+import { Toast } from "vant";
 export default {
   data() {
     return {
@@ -69,10 +74,110 @@ export default {
       refreshing: false,
       status: null,
       orderType:'buyer',
+      dot10:false,
+      dot20:false,
+      dot30:false,
+      dot40:false,
+      dot50:false,
+      dot60:false,
+      dot70:false,
+
     };
   },
   name: "OrderList",
   methods: {
+    orderConfirm(id,status){
+      let newStatus = null;
+      if(!status){
+        return;
+      }
+      if(status ==10){
+        newStatus = 20;
+      }else if(status ==20){
+        newStatus = 30;
+      }else if(status ==30){
+        newStatus = 40;
+      }else if(status ==40){
+        newStatus = 50;
+      }else if(status ==50){
+        newStatus = 60;
+      }else {
+        return;
+      }
+      this.updateOrderStatus(id,newStatus,status);
+    },
+    orderReject(id,status){
+      if(!status){
+        return;
+      }
+      this.updateOrderStatus(id,70,status);
+    },
+    updateOrderStatus(id,status,oldStatus){
+      console.log("status", status);
+      var fd = new FormData();
+      fd.token = this.$store.state.user.token;
+      fd.id = id;
+      fd.status = status;
+      console.log("fd", fd);
+      postRequest("/order/update", fd).then((res) => {
+        console.log("res.data", res.data);
+        if (200 == res.data.code) {
+          for(let i = 0;i<this.list.length;i++){
+            if(id == this.list[i].id ){
+              this.list.splice(i,1);
+              break;
+            }
+          }
+          this.lightenDot(status);
+          this.clearOldDot(oldStatus);
+          Toast.success("更新成功！");
+        } else {
+          Toast.fail("更新失败:" + res.data.msg);
+        }
+      });
+    },
+    clearOldDot(status){
+      if(!status){
+        return;
+      }
+      if(this.list.length<1){
+        if(status ==10){
+          this.dot10 = false;
+        }else if(status ==20){
+          this.dot20 = false;
+        }else if(status ==30){
+          this.dot30 = false;
+        }else if(status ==40){
+          this.dot40 = false;
+        }else if(status ==50){
+          this.dot50 = false;
+        }else if(status ==60){
+          this.dot60 = false;
+        }else if(status ==70){
+          this.dot70 = false;
+        }
+      }
+    },
+    lightenDot(status){
+      if(!status){
+        return;
+      }
+      if(status ==10){
+        this.dot10 = true;
+      }else if(status ==20){
+        this.dot20 = true;
+      }else if(status ==30){
+        this.dot30 = true;
+      }else if(status ==40){
+        this.dot40 = true;
+      }else if(status ==50){
+        this.dot50 = true;
+      }else if(status ==60){
+        this.dot60 = true;
+      }else if(status ==70){
+        this.dot70 = true;
+      }
+    },
     chooseOrderStatus(name, title){
       console.log(name);
       
@@ -166,6 +271,52 @@ export default {
   mounted() {
     
   },
+  filters: {
+    formatDate: function (value) {
+      if (!value) {
+        return "";
+      }
+      let date = new Date(value);
+      let y = date.getFullYear();
+      let MM = date.getMonth() + 1;
+      MM = MM < 10 ? "0" + MM : MM;
+      let d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      let m = date.getMinutes();
+      m = m < 10 ? "0" + m : m;
+      let s = date.getSeconds();
+      s = s < 10 ? "0" + s : s;
+      return y + "-" + MM + "-" + d + " " + h + ":" + m + ":" + s;
+    },
+    formatStatus: function (value) {
+      if (!value) {
+        return "";
+      }
+      if(value ==10){
+        return "待商家接单";
+      }
+      if(value ==20){
+        return "待买家付款";
+      }
+      if(value ==30){
+        return "待商家确认收款";
+      }
+      if(value ==40){
+        return "待商家发货";
+      }
+      if(value ==50){
+        return "待买家确认收货";
+      }
+      if(value ==60){
+        return "完成";
+      }
+      if(value ==70){
+        return "问题单";
+      }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -245,4 +396,11 @@ export default {
     }
   }
 } 
+.van-swipe-cell {
+  width:100%;
+
+  .van-button--square{
+     height: 100%;
+  }
+}
 </style>
