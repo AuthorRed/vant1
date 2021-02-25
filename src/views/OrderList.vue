@@ -9,17 +9,15 @@
       <van-tabs @click="chooseOrderStatus" sticky>
         <van-tab name="100" title="全部"></van-tab>
         <van-tab name="10" title="待接单" :dot="dot10"></van-tab>
-        <van-tab name="20" title="待付款" :dot="dot20" ></van-tab>
-        <van-tab name="30" title="待收款" :dot="dot30" ></van-tab>
-        <van-tab name="40" title="待发货" :dot="dot40" ></van-tab>
+        <van-tab  name="30" title="待付款" :dot="dot30" ></van-tab>
         <van-tab name="50" title="待收货" :dot="dot50" ></van-tab>
         <van-tab name="60" title="完成" :dot="dot60" ></van-tab>
-        <van-tab name="70" title="问题单" :dot="dot70" ></van-tab>
       </van-tabs>
     </div>
 
     <div v-if="$route.path == '/me/orderList'" class="content">
-      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+   <!--  @refresh="onRefresh" -->
+      <van-pull-refresh v-model="refreshing"  @refresh="onRefresh">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -44,9 +42,14 @@
               <h2><span>下单时间：</span> {{item.addTime |formatDate}}</h2>
               <h2><span>更新时间：</span> {{item.updateTime|formatDate}}</h2>
             </div>
+            <template #left>
+              <van-button v-if="item.status < 60" square type="warning" text="已完成" @click="updateOrderStatus(item.id,item.status,60)"/>
+              <van-button v-if="item.status == 10" square type="danger" text="拒绝"  @click="updateOrderStatus(item.id,item.status,70)"/>
+            </template>
             <template #right>
-              <van-button square type="primary" text="确认" @click="orderConfirm(item.id,item.status)"/>
-              <van-button square type="danger" text="拒绝为问题单"  @click="orderReject(item.id,item.status)"/>
+              <van-button v-if="item.status == 10" square type="primary" text="接单" @click="updateOrderStatus(item.id,item.status,30)"/>
+              <van-button v-if="item.status <= 30" square type="info" text="已收款" @click="updateOrderStatus(item.id,item.status,50)"/>
+              <van-button v-if="item.status < 50" square type="default" text="已发货" @click="updateOrderStatus(item.id,item.status,60)"/>
             </template>
           </van-swipe-cell>
             
@@ -70,49 +73,24 @@ export default {
       loading: false,
       finished: false,
       page: 1,
-      rows: 5,
+      rows: 3,
       refreshing: false,
       status: null,
       orderType:'buyer',
       dot10:false,
-      dot20:false,
       dot30:false,
-      dot40:false,
       dot50:false,
       dot60:false,
-      dot70:false,
-
     };
   },
   name: "OrderList",
   methods: {
-    orderConfirm(id,status){
-      let newStatus = null;
-      if(!status){
+    updateOrderStatus(id,oldStatus,status){
+      if(!oldStatus || oldStatus>status){
+        Toast.fail('订单状态不可回撤!');
         return;
       }
-      if(status ==10){
-        newStatus = 20;
-      }else if(status ==20){
-        newStatus = 30;
-      }else if(status ==30){
-        newStatus = 40;
-      }else if(status ==40){
-        newStatus = 50;
-      }else if(status ==50){
-        newStatus = 60;
-      }else {
-        return;
-      }
-      this.updateOrderStatus(id,newStatus,status);
-    },
-    orderReject(id,status){
-      if(!status){
-        return;
-      }
-      this.updateOrderStatus(id,70,status);
-    },
-    updateOrderStatus(id,status,oldStatus){
+
       console.log("status", status);
       var fd = new FormData();
       fd.token = this.$store.state.user.token;
@@ -207,34 +185,15 @@ export default {
     gotoCommodity(id) {
       this.$router.push("/me/commodityList/commodityDisplay/" + id);
     },
-    getUser() {
-      let user = {};
-      const cacheUser = sessionStorage.getItem("user");
-      if (cacheUser) {
-        try {
-          user = JSON.parse(cacheUser);
-        } catch (error) {
-          console.log(error);
-        }
-        this.user = user;
-        this.seller = user.uid;
-      }
-    },
-
     onRefresh() {
       // 清空列表数据
-      // let array = this.list;
-      // for (let i = 0;i<array.length;i++) {
-      //   console.log(array.pop());  
-      // }
       this.list =[];
-
-      this.finished = false;
       this.page = 1;
       // 重新加载数据
-      // this.getList();
+      this.getList();
     },
     getList() {
+      this.loading = true;
       let params={};
       params.token = this.$store.state.user.token;
       params.orderType = this.orderType;
@@ -249,6 +208,7 @@ export default {
             this.finished = true;
           } else {
             this.page++;
+            this.finished = false;
           }
           for (let i = 0; i < payload.extenal.list.length; i++) {
             this.list.push(payload.extenal.list[i]);
@@ -269,7 +229,7 @@ export default {
     },
   },
   mounted() {
-    
+    this.getList();
   },
   filters: {
     formatDate: function (value) {
@@ -297,17 +257,11 @@ export default {
       if(value ==10){
         return "待商家接单";
       }
-      if(value ==20){
-        return "待买家付款";
-      }
       if(value ==30){
-        return "待商家确认收款";
-      }
-      if(value ==40){
-        return "待商家发货";
+        return "待付款";
       }
       if(value ==50){
-        return "待买家确认收货";
+        return "待收货";
       }
       if(value ==60){
         return "完成";
