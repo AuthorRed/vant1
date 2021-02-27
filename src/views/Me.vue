@@ -38,12 +38,14 @@
       <router-link to="/me/orderList" tag="a">
         <van-cell title="订单" is-link />
       </router-link>
-      <router-link to="/shop" tag="a">
+      <router-link to="/me/shop" tag="a">
         <van-cell title="我的店铺" is-link />
       </router-link>
     </div>
     <transition name="slide">
-      <router-view></router-view>
+      <keep-alive include="Shop,OrderList"> 
+        <router-view></router-view>
+      </keep-alive>
     </transition>
   </div>
 </template>

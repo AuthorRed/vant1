@@ -44,7 +44,7 @@ const routes = [
     component: () => import('../views/Me.vue'),
     children:  [
       {
-        path: '/shop',
+        path: 'shop',
         name: 'Shop',
         component: () => import( '../views/Shop.vue')
       },
@@ -52,6 +52,11 @@ const routes = [
         path: 'orderList',
         name: 'OrderList',
         component: () => import('../views/OrderList.vue')
+      }, 
+      {
+        path: 'orderDetail/:id',
+        name: 'OrderDetail',
+        component: () => import('../views/OrderDetail.vue')
       }, 
       {
         path: 'placeOrder',

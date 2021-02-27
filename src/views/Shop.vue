@@ -142,6 +142,7 @@ export default {
       this.getList();
     },
     gotoCommodity(id) {
+      console.log('gotoCommodity',id);
       this.$router.push("/me/commodityList/commodityDisplay/" + id);
     },
     onRefresh() {
