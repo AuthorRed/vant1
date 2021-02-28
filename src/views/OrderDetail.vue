@@ -21,12 +21,19 @@
             >
                 <div class="block">
                   <h2><span>订单号：</span> {{ item.id }}</h2>
-                  <h2><span>商品标题：</span> {{ item.title }}</h2>
-                  <h2><span>买家：</span> {{ item.buyerUid }}</h2>
-                  <h2><span>数量：</span> {{ item.num }}</h2>
-                  <h2><span>金额：</span> {{ item.buyerPay }}</h2>
-                  <h2><span>备注：</span> {{ item.remark }}</h2>
-                  <h2><span>商品头像：</span> {{ item.headImg }}</h2>
+                 <!-- <h2><span>商品ID：</span> {{ item.commodityId }}</h2>
+                  <h2><span>备注：</span> {{ item.remark }}</h2> -->
+                  <van-card
+                    :num="item.num"
+                    :price="'实付:'+item.buyerPay"
+                    desc="描述信息"
+                    :title="item.title"
+                    :thumb="item.headImg?('http://localhost:8080/file/getFileById?id=' + item.headImg):null "
+                  >
+                  <template #footer>
+                    <van-button plain  size="small" @click="toCommentAdd(item.commodityId)">评价晒单</van-button>
+                    <van-button plain  size="small" @click="gotoCommodity(item.commodityId)">查看商品</van-button>
+                  </template></van-card>
                 </div>
             </a>
           </div>
@@ -45,10 +52,16 @@ export default {
   },
   name: "OrderDetail",
   methods: {
+    gotoCommodity(id){
+      this.$router.push("/me/commodityList/commodityDisplay/" + id);
+    },
+    toCommentAdd(id){
+      console.log('commodityId',id);
+      this.$router.push('/me/commentAdd?commodityId=' + id);
+    },
     back() {
       this.$router.go(-1);
     },
-
     getList() {
       if (this.orderId==0) {
         return;

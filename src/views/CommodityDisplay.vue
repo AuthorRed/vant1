@@ -1,18 +1,20 @@
 <template>
   <div class="container">
     <div v-if="$route.path.indexOf('/messageItem') < 0" class="content">
-      <van-nav-bar
-        title="商品"
-        left-text="返回"
-        left-arrow
-        @click-left="back()"
-      />
+      <div class="navBar">
+        <div class="iconWraper" @click="back">
+          <van-icon  color="#fff" name="arrow-left" size="20"/>
+        </div>
+        <div class="iconWraper" style="display:none">
+          <van-icon  color="#fff" name="weapp-nav" size="20"/>
+        </div>
+      </div>
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item v-for="(id, index) in imgList" :key="index">
+        <van-swipe-item v-for="(id, index) in swipeList" :key="index">
           <img
             :src="'http://localhost:8080/file/getFileById?id=' + id"
             width="100%"
-            height="200px"
+            height="500px"
             style="display: block"
           />
         </van-swipe-item>
@@ -20,6 +22,26 @@
       <h2>{{ commodity.title }}</h2>
       <h3>￥:{{ commodity.price }}</h3>
       <h2>{{ commodity.seller }}</h2>
+
+      <div class="commentBlock"> 
+        <div class="commentHeader">
+          <span>评价</span>
+          <span class="checkAllComment" @click="gotoCommentList()">查看全部&nbsp;&nbsp;&nbsp;&nbsp;<van-icon name="arrow" /></span>
+        </div>
+        <div v-for="(item, index) in commentVO" :key="index" class="commentItem">
+          <div class="commentUser"><img src="../assets/logo.png" alt=""> {{item.comment.uid}}</div>
+          <p>{{item.comment.text}}</p>
+          <p class="commentImg" style="display: flex">
+            <img v-for="(attach, index) in item.attaches" :key="index"
+              :src="'http://localhost:8080/file/getFileById?id=' + attach.id"
+            />
+          </p>
+        </div>
+      </div>
+
+      <div class="detailImg">
+        <img v-for="(id, index) in detailList" :key="index" :src="'http://localhost:8080/file/getFileById?id=' + id" alt="图片">
+      </div>
     
       <buy-cart ref="buyCart" :seller="commodity.seller" :showCartIcon="showCartIcon" ></buy-cart>
       <van-goods-action>
@@ -34,12 +56,6 @@
           text="店铺"
           @click="toSellerShop"
         />
-        <!-- <van-goods-action-button type="warning" text="加入购物车" />
-        <van-goods-action-button
-          type="danger"
-          text="立即购买"
-          @click="toPlaceOrder"
-        /> -->
         <van-goods-action-button type="warning" text="加入购物车"  @click="add2buyCart"/>
         <van-goods-action-button type="danger" text="立即购买" @click="toPlaceOrder"/>
       </van-goods-action>
@@ -47,7 +63,6 @@
     <transition name="slide">
       <router-view></router-view>
     </transition>
-    <!-- <buy-cart></buy-cart> -->
   </div>
 </template>
 <script>
@@ -59,9 +74,12 @@ export default {
     return {
       searchValue: "",
       imgList: [],
+      swipeList: [],
+      detailList: [],
       commodityId: 0,
       commodity: {},
       showCartIcon:false,
+      commentVO:[],
     };
   },
   name: "CommodityDisplay",
@@ -69,20 +87,15 @@ export default {
     "buy-cart": BuyCart,
   },
   methods: {
+    gotoCommentList(){
+      this.$router.push('/me/commodityList/commentList?commodityId='+this.commodityId);
+    },
     add2buyCart(){
       this.$refs.buyCart.addItem(this.commodity);
     },
     showCartPopup(){
       this.$refs.buyCart.showCartPopup();
-      // console.log("showCartPopup:",this.$refs.buyCart);
     },
-    /* toCustomerService() {
-      this.$router.push(
-        "/me/commodityList/commodityDisplay/" +
-          this.$route.params.id +
-          "/messageItem"
-      );
-    }, */
     toCustomerService() {
       console.log("this.seller:", this.commodity.seller);
       if(this.commodity.seller == this.$store.state.user.uid){
@@ -99,29 +112,22 @@ export default {
       console.log("toPlaceOrder");
       this.$router.push('/me/placeOrder');
     },
-    getUser() {
-      let user = {};
-      const cacheUser = sessionStorage.getItem("user");
-      if (cacheUser) {
-        try {
-          user = JSON.parse(cacheUser);
-        } catch (error) {
-          console.log(error);
-        }
-        this.user = user;
-      }
-    },
     getCommodity() {
       this.loading = true;
-      getRequest("/a/" + this.commodityId).then((res) => {
+      getRequest("/commodity/getCommodity/" + this.commodityId).then((res) => {
         console.log("commodity:", res.data);
         let payload = res.data;
         if (200 == payload.code && payload.extenal.attaches) {
           this.commodity = payload.extenal.commodity;
           for (let i = 0; i < payload.extenal.attaches.length; i++) {
-            this.imgList.push(payload.extenal.attaches[i].id);
-            // console.log('imgList',this.imgList[i]);
+            if(payload.extenal.attaches[i].type==20){
+              this.swipeList.push(payload.extenal.attaches[i].id);
+            }else if(payload.extenal.attaches[i].type==30){
+              this.detailList.push(payload.extenal.attaches[i].id);
+            }
           }
+
+          this.commentVO = payload.extenal.commentVO;
         }
       });
     },
@@ -134,7 +140,6 @@ export default {
     this.commodityId = this.$route.params.id;
     console.log("mounted-CommodityDisplay", this.commodityId);
     this.getCommodity();
-    this.getUser();
   },
 };
 </script>
@@ -178,5 +183,81 @@ h3 {
   display: inherit;
   color: #fc4a3c;
   font-weight: normal;
+}
+
+.detailImg {
+  img{
+      width: 100vw;
+  }
+}
+.navBar {
+  top: 1rem;
+  left: 0;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  height: 2rem;
+  background-color: rgba(0,0,0,0);
+  z-index: 99;
+
+  .iconWraper {
+    background-color: rgba(0,0,0,.6);
+    border-radius: 2rem;
+    height: 2rem;
+    width: 2rem;
+    line-height: 2.5rem;
+    margin-left: 1rem;
+  }
+}
+
+.commentBlock {
+  background-color: #fff;
+  padding-bottom: .5rem;
+
+  .commentHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    color: black;
+    line-height: 2rem;
+    
+    .checkAllComment {
+      display: flex;
+      align-items: center;
+    }
+  }
+  .commentItem {
+    margin-left: .5rem;
+    margin-right: .5rem;
+    border-bottom: .5px solid rgba(0,0,0,.2);
+    padding-bottom: .5rem;
+    .commentUser {
+      text-align: left;
+      margin-top: .5rem;
+      margin-bottom: .5rem;
+    }
+    .commentImg{
+      display: flex;
+      flex-wrap: wrap;
+      img {
+        width: 6rem;
+        height: 6rem;
+        margin:.2rem;
+      }
+    }
+    img {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 0.2rem;
+      }
+    p {
+      text-align: left;
+      font-size: small;
+      line-height: 1rem;
+    }
+  }
 }
 </style>

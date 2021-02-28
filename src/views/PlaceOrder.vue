@@ -101,6 +101,10 @@ export default {
         orderDetail.num = list[i].amount;
         orderDetail.remark = list[i].remark;
         orderDetail.commodityDesc = list[i].commodityDesc;  
+
+        orderDetail.buyerPay = list[i].price;  
+        orderDetail.title = list[i].title;  
+        orderDetail.headImg = list[i].headImg;
         orderDetailList.push(orderDetail);
       }
       let order = {};

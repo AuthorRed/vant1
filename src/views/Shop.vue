@@ -170,7 +170,7 @@ export default {
         page: this.page,
         rows: this.rows,
         status: this.status,
-        seller: this.$store.state.user.uid,
+        seller: this.seller,
         category: category,
       }).then((res) => {
         // console.log('commodity/list:',res.data);
@@ -201,6 +201,7 @@ export default {
     },
   },
   mounted() {
+    this.seller = this.$route.params.uid;
     this.getSellerCategory();
   },
 };

@@ -21,7 +21,7 @@
         placeholder="商品类别"
         :rules="[{ required: true, message: '请填写商品类别' }]"
       />
-      <van-field v-model="price" name="price" label="单价" placeholder="单价" />
+      <van-field v-model="price" name="price" label="单价" type="number" placeholder="单价" />
       <van-field
         v-model="seller"
         name="seller"
@@ -29,9 +29,19 @@
         placeholder="商家"
         readonly
       />
-      <van-field name="uploader" label="文件上传">
+      <van-field name="uploader" label="上传头像">
         <template #input>
-          <van-uploader v-model="uploader" :after-read="afterRead" />
+          <van-uploader v-model="headImgUploader" :after-read="headImgAfterRead" max-count="1"/>
+        </template>
+      </van-field>
+      <van-field name="uploader" label="上传轮播图">
+        <template #input>
+          <van-uploader v-model="swipeImgUploader" :after-read="swipeImgAfterRead"  max-count="10"/>
+        </template>
+      </van-field>
+      <van-field name="uploader" label="上传详情">
+        <template #input>
+          <van-uploader v-model="detailImgUploader" :after-read="detailImgAfterRead" max-count="10" />
         </template>
       </van-field>
       <div style="margin: 16px">
@@ -50,8 +60,9 @@ export default {
       price: "",
       seller: "",
       category:"",
-      user: {},
-      uploader: [],
+      headImgUploader:[],
+      swipeImgUploader:[],
+      detailImgUploader:[],
       commodityId:0,
     };
   },
@@ -70,20 +81,10 @@ export default {
         }
       });
     },
-    getUser() {
-      let user = {};
-      const cacheUser = sessionStorage.getItem("user");
-      if (cacheUser) {
-        try {
-          user = JSON.parse(cacheUser);
-        } catch (error) {
-          console.log(error);
-        }
-        this.user = user;
-        this.seller = user.uid;
-      }
-    },
-    afterRead(file) {
+    // HEAD_IMG("HEAD_IMG",new Byte("10")),
+    // SWIPE_IMG("SWIPE_IMG",new Byte("20")),
+    // DETAIL_IMG("DETAIL_IMG",new Byte("30"));
+    headImgAfterRead(file) {
       console.log(file);
       if(this.commodityId==0 ||isNaN(this.commodityId)){
         Toast.fail("现在无法添加商品，请刷新页面重新进入！");
@@ -91,6 +92,46 @@ export default {
       let param = new FormData(); //创建form对象
       param.append('file',file.file);//通过append向form对象添加数据
       param.append('fid',this.commodityId);
+      param.append('type',10);
+      param.append('token',this.$store.state.user.token);
+      postFile('http://localhost:8080/file/fileUpload',param).then(res=>{
+        console.log(res.data);
+        if (200 == res.data.code) {
+          Toast.success("上传成功！");
+        } else {
+          Toast.fail("上传失败:" + res.data.msg);
+        }
+      })
+    },
+    swipeImgAfterRead(file) {
+      console.log(file);
+      if(this.commodityId==0 ||isNaN(this.commodityId)){
+        Toast.fail("现在无法添加商品，请刷新页面重新进入！");
+      }
+      let param = new FormData(); //创建form对象
+      param.append('file',file.file);//通过append向form对象添加数据
+      param.append('fid',this.commodityId);
+      param.append('type',20);
+      param.append('token',this.$store.state.user.token);
+      postFile('http://localhost:8080/file/fileUpload',param).then(res=>{
+        console.log(res.data);
+        if (200 == res.data.code) {
+          Toast.success("上传成功！");
+        } else {
+          Toast.fail("上传失败:" + res.data.msg);
+        }
+      })
+    },
+    detailImgAfterRead(file) {
+      console.log(file);
+      if(this.commodityId==0 ||isNaN(this.commodityId)){
+        Toast.fail("现在无法添加商品，请刷新页面重新进入！");
+      }
+      let param = new FormData(); //创建form对象
+      param.append('file',file.file);//通过append向form对象添加数据
+      param.append('fid',this.commodityId);
+      param.append('type',30);
+      param.append('token',this.$store.state.user.token);
       postFile('http://localhost:8080/file/fileUpload',param).then(res=>{
         console.log(res.data);
         if (200 == res.data.code) {
@@ -112,8 +153,6 @@ export default {
       postRequest("/commodity/addCommodity", fd).then((res) => {
         console.log("res.data", res.data);
         if (200 == res.data.code) {
-          // let user = res.data.extenal.user;
-          // sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user));
           Toast.success("添加成功！");
           this.$parent.onRefresh();
           this.$router.push("/me/commodityList");
@@ -128,7 +167,7 @@ export default {
   },
   mounted() {
     console.log("mounted-CommodityAdd");
-    this.getUser();
+    this.seller = this.$store.state.user.uid;
     this.getFid();
   },
 };
