@@ -28,7 +28,7 @@
           <a  v-for="(item) in list" :key="item.id" 
             class="listItem"
             href="javascript:void(0)"
-            @click="gotoCommodity(item.id)"
+            @click="gotoOrderDetail(item.id)"
           >
           <van-swipe-cell>
             <div class="block">
@@ -182,8 +182,8 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    gotoCommodity(id) {
-      this.$router.push("/me/commodityList/commodityDisplay/" + id);
+    gotoOrderDetail(id) {
+      this.$router.push("/me/OrderDetail/" + id);
     },
     onRefresh() {
       // 清空列表数据

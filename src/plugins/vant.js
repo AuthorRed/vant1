@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {Uploader,Tab, Tabs,Cell, CellGroup,Form,Field,Button,Toast,Swipe, SwipeItem,Search,NavBar,List,
     PullRefresh,Icon,GoodsAction, GoodsActionIcon, GoodsActionButton,Divider,Tabbar,TabbarItem,Popup,
-    Card,Stepper,RadioGroup, Radio,SwipeCell    } from 'vant';
+    Card,Stepper,RadioGroup, Radio,SwipeCell,Rate,Loading    } from 'vant';
 import 'vant/lib/uploader/style';
 import 'vant/lib/cell/style';
 import 'vant/lib/cell-group/style';
@@ -26,6 +26,8 @@ import 'vant/lib/stepper/style';
 import 'vant/lib/radio-group/style';
 import 'vant/lib/radio/style';
 import 'vant/lib/swipe-cell/style';
+import 'vant/lib/rate/style';
+import 'vant/lib/loading/style';
 
 Vue.use(Uploader);
 Vue.use(Tab);
@@ -55,3 +57,5 @@ Vue.use(Stepper);
 Vue.use(Radio);
 Vue.use(RadioGroup);
 Vue.use(SwipeCell);
+Vue.use(Rate);
+Vue.use(Loading);

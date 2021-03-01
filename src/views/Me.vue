@@ -35,15 +35,17 @@
       <router-link to="/me/placeOrder" tag="a">
         <van-cell title="下单" is-link />
       </router-link>
-      <router-link to="/me/orderList" tag="a">
+      <router-link v-if="$store.state.user" to="/me/orderList" tag="a">
         <van-cell title="订单" is-link />
       </router-link>
-      <router-link to="/shop" tag="a">
+      <router-link v-if="$store.state.user" :to="'/me/shop/'+$store.state.user.uid" tag="a">
         <van-cell title="我的店铺" is-link />
       </router-link>
     </div>
     <transition name="slide">
-      <router-view></router-view>
+      <keep-alive include="Shop,OrderList"> 
+        <router-view></router-view>
+      </keep-alive>
     </transition>
   </div>
 </template>
@@ -52,7 +54,6 @@ import { getRequest, postFile, postRequest } from "@/api/http.js";
 export default {
   data() {
     return {
-      user: {},
       title: "个人页面",
     };
   },
@@ -61,7 +62,7 @@ export default {
     userTitle: {
       get:function () {
         let userTitle = "个人页面";
-        if (this.$store.user) {
+        if (this.$store.state.user) {
           userTitle =userTitle+ ":" + this.$store.user.nickName;
         }
         return userTitle;
@@ -78,19 +79,19 @@ export default {
     logout(){
       this.$store.commit('setUser',null);
     },
-    getUser(){
-      let user = {};
-      const cacheUser = sessionStorage.getItem("user");
-      if(cacheUser){
-        try {
-          user = JSON.parse(cacheUser);
-        } catch (error) {
-          console.log(error);
-        }
-        this.user = user;
-        this.seller = user.uid;
-      };
-    }
+    // getUser(){
+    //   let user = {};
+    //   const cacheUser = sessionStorage.getItem("user");
+    //   if(cacheUser){
+    //     try {
+    //       user = JSON.parse(cacheUser);
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //     this.user = user;
+    //     this.seller = user.uid;
+    //   };
+    // }
   },
   mounted() {
     //this.getUser();
