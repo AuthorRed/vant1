@@ -8,20 +8,13 @@
           $route.path == '/me' ||
           $route.path == '/' ||
           $route.path == '/home' ||
-          $route.path == '/about' ||
+          $route.path == '/orderList' ||
           $route.path == '/messageList'
         "
       >
-        <!-- <div class="down-tab">
-          <router-link to="/" tag="a">home</router-link>
-          <router-link to="/about" tag="a">about</router-link>
-          <router-link to="/messageList" tag="a">消息</router-link>
-          <router-link to="/me" tag="a">我</router-link>
-        </div> -->
-
         <van-tabbar v-model="active">
-          <van-tabbar-item name='home' icon="home-o" to="/">home</van-tabbar-item>
-          <van-tabbar-item name='about'  icon="search" to="/about">about</van-tabbar-item>
+          <van-tabbar-item name='home' icon="wap-home-o" to="/">首页</van-tabbar-item>
+          <van-tabbar-item name='about'  icon="records" to="/orderList">订单</van-tabbar-item>
           <van-tabbar-item name='message'  icon="chat-o" to="/messageList">消息</van-tabbar-item>
           <van-tabbar-item name='me' icon="user-o" to="/me">我</van-tabbar-item>
         </van-tabbar>
@@ -65,6 +58,7 @@ export default {
   position: absolute;
   bottom: 1rem;
   width: 100%;
+  z-index: 99;
 }
 .down-tab {
   display: flex;

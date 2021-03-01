@@ -7,8 +7,9 @@
           v-model="keyWord"
           show-action
           placeholder="搜索店内商品"
+          action-text="添加商品"
           @search="onSearch"
-          @cancel="back"
+          @cancel="commodityAdd"
         >
           <template #left>
             <div @click="back"><van-icon name="arrow-left" /></div>
@@ -194,7 +195,7 @@ export default {
       });
     },
     commodityAdd() {
-      this.$router.push("/me/commodityList/commodityAdd");
+      this.$router.push("/me/commodityAdd");
     },
     onLoad() {
       this.getList();

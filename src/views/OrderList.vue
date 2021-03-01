@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <van-nav-bar title="订单" left-text="返回" left-arrow @click-left="back()"/>
+      <!-- <van-nav-bar title="订单" left-text="返回" left-arrow @click-left="back()"/> -->
       <van-tabs @click="chooseOrderType">
         <van-tab name="buyer" title="我发出的订单"></van-tab>
         <van-tab name="seller" title="我收到的订单"></van-tab>
@@ -14,9 +14,7 @@
         <van-tab name="60" title="完成" :dot="dot60" ></van-tab>
       </van-tabs>
     </div>
-
-    <div v-if="$route.path == '/me/orderList'" class="content">
-   <!--  @refresh="onRefresh" -->
+    <div v-if="$route.path == '/orderList'" class="content">
       <van-pull-refresh v-model="refreshing"  @refresh="onRefresh">
       <van-list
         v-model="loading"
@@ -52,10 +50,8 @@
               <van-button v-if="item.status < 50" square type="default" text="已发货" @click="updateOrderStatus(item.id,item.status,60)"/>
             </template>
           </van-swipe-cell>
-            
           </a>
         </div>
-      
       </van-list>
       </van-pull-refresh>
     </div>
@@ -289,7 +285,7 @@ export default {
   }
   .content {
     position: absolute;
-    top: 138px;
+    top: 90px;
     width: 100%;
 
     .van-card {

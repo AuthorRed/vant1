@@ -162,7 +162,7 @@ export default {
       });
     },
     back() {
-      this.$router.push("/me/commodityList");
+      this.$router.go(-1);
     },
   },
   mounted() {

@@ -21,15 +21,20 @@ const routes = [
       }
     ]
   },
+  /* {
+    path: 'about',
+    name: 'About',
+    component: () => import('../views/About.vue')
+  }, */
   {
     path: '/shop/:uid',
     name: 'Shop',
     component: () => import( '../views/Shop.vue')
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import( '../views/About.vue')
+    path: '/orderList',
+    name: 'OrderList',
+    component: () => import( '../views/OrderList.vue')
   },
   {
     path: '/messageList',
@@ -57,11 +62,6 @@ const routes = [
         path: 'shop/:uid',
         name: 'Shop',
         component: () => import( '../views/Shop.vue')
-      },
-      {
-        path: 'orderList',
-        name: 'OrderList',
-        component: () => import('../views/OrderList.vue')
       }, 
       {
         path: 'orderDetail/:id',
@@ -84,16 +84,17 @@ const routes = [
         component: () => import('../views/LoginForm.vue')
       },
       {
+        path: 'commodityAdd',
+        name: 'CommodityAdd',
+        component: () => import('../views/CommodityAdd.vue')
+      },
+      {
         path: 'commodityList',
         name: 'CommodityList',
         component: () => import('../views/CommodityList.vue')
         ,
         children:  [
-          {
-            path: 'commodityAdd',
-            name: 'CommodityAdd',
-            component: () => import('../views/CommodityAdd.vue')
-          },
+          
           {
             path: 'commodityDisplay/:id',
             name: 'CommodityDisplay',
@@ -118,12 +119,6 @@ const routes = [
         name: 'RegisterForm',
         component: () => import('../views/RegisterForm.vue')
       },
-      {
-        path: 'goodsList',
-        name: 'GoodsList',
-        component: () => import('../views/GoodsList.vue')
-      },
-        
       ]
     
   }

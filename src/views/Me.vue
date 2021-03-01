@@ -1,15 +1,6 @@
 <template>
   <div class="me">
-    <!-- <h1>个人页面:{{user?user.nickName:'未登录!'}}</h1> -->
     <div v-if="$route.path=='/me'" class="container">
-      <!-- <van-nav-bar
-        title="个人页面"
-        left-text="返回"
-        left-arrow
-        @click-left="back()"
-        right-text="注销"
-        @click-right="logout()"
-      ></van-nav-bar> -->
       <div>
         <div class="currentUser">
 
@@ -26,18 +17,12 @@
       <router-link to="/me/registerForm" tag="a">
         <van-cell title="注册" is-link />
       </router-link>
-      <router-link to="/me/goodsList" tag="a">
-        <van-cell title="goodsList" is-link />
-      </router-link>
-      <router-link to="/me/commodityList" tag="a">
+      <!-- <router-link to="/me/commodityList" tag="a">
         <van-cell title="商品服务列表" is-link />
-      </router-link>
-      <router-link to="/me/placeOrder" tag="a">
-        <van-cell title="下单" is-link />
-      </router-link>
-      <router-link v-if="$store.state.user" to="/me/orderList" tag="a">
+      </router-link> -->
+      <!-- <router-link v-if="$store.state.user" to="/me/orderList" tag="a">
         <van-cell title="订单" is-link />
-      </router-link>
+      </router-link> -->
       <router-link v-if="$store.state.user" :to="'/me/shop/'+$store.state.user.uid" tag="a">
         <van-cell title="我的店铺" is-link />
       </router-link>
@@ -79,22 +64,8 @@ export default {
     logout(){
       this.$store.commit('setUser',null);
     },
-    // getUser(){
-    //   let user = {};
-    //   const cacheUser = sessionStorage.getItem("user");
-    //   if(cacheUser){
-    //     try {
-    //       user = JSON.parse(cacheUser);
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //     this.user = user;
-    //     this.seller = user.uid;
-    //   };
-    // }
   },
   mounted() {
-    //this.getUser();
   },
   watch: {
     // $route(to, from) {
