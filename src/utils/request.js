@@ -45,8 +45,8 @@ service.interceptors.response.use(
       // alert(1)
       // window.location.href = error.response.headers.location
       router.replace({
-          path: '/login',
-          query: {redirect: router.currentRoute.fullPath}
+                      path: '/login',
+                      query: {redirect: router.currentRoute.fullPath}
                     })
     }
     return Promise.reject(error)
