@@ -191,23 +191,21 @@ export default {
     getList() {
       this.loading = true;
       let params={};
-      params.token = this.$store.state.user.token;
       params.orderType = this.orderType;
       params.page = this.page;
       params.rows = this.rows;
       params.status = this.status ==100?null:this.status;
       getRequest("/order/list?",params).then((res) => {
-        console.log('order/list:',res.data);
-        let payload = res.data;
-        if (200 == payload.code && payload.extenal.list) {
-          if (payload.extenal.list.length < 1 || payload.extenal.list.length <this.rows) {
+        console.log(res);
+        if (res && 200 == res.data.code && res.data.extenal.list) {
+          if (res.data.extenal.list.length < 1 || res.data.extenal.list.length <this.rows) {
             this.finished = true;
           } else {
             this.page++;
             this.finished = false;
           }
-          for (let i = 0; i < payload.extenal.list.length; i++) {
-            this.list.push(payload.extenal.list[i]);
+          for (let i = 0; i < res.data.extenal.list.length; i++) {
+            this.list.push(res.data.extenal.list[i]);
           }
         } else {
           this.finished = true;

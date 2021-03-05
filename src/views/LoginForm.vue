@@ -28,6 +28,7 @@
 <script>
 import { postRequest } from "@/api/http.js";
 import { Toast } from "vant";
+import LocalStorage from "../utils/localStorage.js";
 export default {
   data() {
     return {
@@ -49,6 +50,7 @@ export default {
         if(200==res.data.code){
           let user = res.data.extenal.user;
           sessionStorage.setItem("user", JSON.stringify(res.data.extenal.user)); 
+          LocalStorage.set('refreshToken',user.refreshToken);
           this.$store.commit('setUser',user)
           Toast.success("登录成功！");
           let successForwordUrl = '/me?rgs=true'
